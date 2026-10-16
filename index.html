@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0b0c0e" />
   <meta name="description" content="ASfy — Your music. Your videos. Your device. Your ASfy. A premium local & Supabase Cloud media player." />
-  <title>ASfy — Your Music. Your Videos. Your Device & Supabase Cloud.</title>
+  <title>ASfy — Your Music. Your Videos. Your Device &amp; Supabase Cloud.</title>
   <style>
     /* ==========================================================================
        1. CSS VARIABLES & DESIGN TOKENS (Pure CSS3 — No Frameworks)
@@ -51,6 +51,7 @@
       --player-height: 92px;
       --player-height-mobile: 68px;
       --mobile-nav-height: 62px;
+      --app-padding: 8px;
 
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
       --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -72,6 +73,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
@@ -84,7 +86,9 @@
       line-height: 1.5;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       user-select: none;
+      overscroll-behavior: none;
     }
 
     button, input, select, textarea {
@@ -98,11 +102,18 @@
 
     button {
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible, a:focus-visible {
       outline: 2px solid var(--accent-primary);
       outline-offset: 2px;
+      border-radius: 4px;
     }
 
     button:disabled {
@@ -126,6 +137,63 @@
       background: rgba(255, 255, 255, 0.28);
     }
 
+    /* Search Match Highlight */
+    .search-mark {
+      background: linear-gradient(90deg, rgba(181, 255, 43, 0.35), rgba(30, 215, 96, 0.3));
+      color: var(--accent-primary);
+      border-radius: 4px;
+      padding: 0 3px;
+      font-weight: 700;
+      box-shadow: 0 0 0 1px rgba(181, 255, 43, 0.25);
+    }
+
+    .search-header-card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 22px;
+    }
+
+    .search-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-sort-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .search-section {
+      margin-bottom: 28px;
+    }
+
+    .search-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .search-count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 26px;
+      height: 22px;
+      padding: 0 9px;
+      background: var(--accent-dim);
+      color: var(--accent-primary);
+      border: 1px solid rgba(181, 255, 43, 0.3);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 700;
+      margin-left: 8px;
+      letter-spacing: 0;
+    }
+
     /* ==========================================================================
        3. APP SHELL LAYOUT (3-Part Desktop + Mobile Adaptive)
        ========================================================================== */
@@ -136,8 +204,8 @@
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      padding: 8px;
-      gap: 8px;
+      padding: var(--app-padding);
+      gap: var(--app-padding);
       background: var(--bg-base);
       position: relative;
       overflow: hidden;
@@ -149,6 +217,7 @@
       inset: 0;
       background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       z-index: 115;
       opacity: 0;
       transition: opacity var(--transition-smooth);
@@ -208,6 +277,7 @@
       background: var(--accent-dim);
       color: var(--accent-primary);
       border: 1px solid rgba(181, 255, 43, 0.3);
+      white-space: nowrap;
     }
 
     .sidebar-scroll {
@@ -303,6 +373,7 @@
       font-size: 13px;
       transition: all var(--transition-fast);
       white-space: nowrap;
+      min-height: 38px;
     }
 
     .btn svg {
@@ -367,6 +438,7 @@
       padding: 2px 6px;
       border-radius: var(--radius-full);
       vertical-align: middle;
+      white-space: nowrap;
     }
 
     .storage-pill-badge.local {
@@ -400,6 +472,7 @@
       color: var(--text-secondary);
       cursor: pointer;
       transition: all var(--transition-fast);
+      white-space: nowrap;
     }
 
     .cloud-status-chip:hover {
@@ -412,6 +485,7 @@
       height: 8px;
       border-radius: 50%;
       background: var(--warning);
+      flex-shrink: 0;
     }
 
     .cloud-status-dot.online {
@@ -461,6 +535,7 @@
       color: var(--text-secondary);
       transition: all var(--transition-fast);
       position: relative;
+      flex-shrink: 0;
     }
 
     .icon-btn svg {
@@ -500,6 +575,7 @@
       flex-direction: column;
       overflow: hidden;
       position: relative;
+      min-width: 0;
     }
 
     .top-bar {
@@ -510,6 +586,7 @@
       padding: 14px 24px;
       background: rgba(18, 20, 24, 0.75);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-subtle);
       z-index: 15;
     }
@@ -520,6 +597,7 @@
       gap: 12px;
       flex: 1;
       max-width: 540px;
+      min-width: 0;
     }
 
     .mobile-menu-btn {
@@ -531,6 +609,7 @@
       flex: 1;
       display: flex;
       align-items: center;
+      min-width: 0;
     }
 
     .search-input-wrap svg.search-icon {
@@ -549,14 +628,22 @@
       border-radius: var(--radius-full);
       padding: 9px 36px 9px 38px;
       color: var(--text-primary);
-      font-size: 13px;
+      font-size: 16px; /* Prevent iOS auto-zoom */
       transition: all var(--transition-fast);
+    }
+
+    @media (min-width: 700px) {
+      .search-input { font-size: 13px; }
     }
 
     .search-input:focus {
       background: var(--bg-hover);
       border-color: var(--accent-primary);
       box-shadow: 0 0 0 3px rgba(181, 255, 43, 0.12);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
     }
 
     .search-clear-btn {
@@ -569,6 +656,8 @@
       align-items: center;
       justify-content: center;
       color: var(--text-muted);
+      font-size: 18px;
+      line-height: 1;
     }
 
     .search-clear-btn:hover {
@@ -591,7 +680,6 @@
       padding: 4px 10px;
       border-radius: var(--radius-full);
       cursor: pointer;
-      title: "Toggle Visualizer Mode";
     }
 
     #headerVisualizerCanvas {
@@ -609,6 +697,7 @@
       flex-direction: column;
       gap: 28px;
       scroll-behavior: smooth;
+      min-width: 0;
     }
 
     /* ==========================================================================
@@ -625,6 +714,12 @@
                   linear-gradient(135deg, #1c212b 0%, #12151c 100%);
       border: 1px solid rgba(181, 255, 43, 0.18);
       box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+
+    .hero-text {
+      min-width: 0;
+      flex: 1;
     }
 
     .hero-text h1 {
@@ -632,6 +727,7 @@
       font-weight: 800;
       letter-spacing: -0.5px;
       margin-bottom: 6px;
+      line-height: 1.2;
     }
 
     .hero-text p {
@@ -661,6 +757,12 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      transition: all var(--transition-fast);
+    }
+
+    .stat-card:hover {
+      background: var(--bg-hover);
+      transform: translateY(-2px);
     }
 
     .stat-icon {
@@ -673,6 +775,10 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+    }
+
+    .stat-info {
+      min-width: 0;
     }
 
     .stat-info .stat-val {
@@ -702,6 +808,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .filter-pills {
@@ -720,6 +827,7 @@
       font-size: 12.5px;
       font-weight: 600;
       transition: all var(--transition-fast);
+      min-height: 32px;
     }
 
     .pill:hover {
@@ -741,6 +849,7 @@
       color: var(--text-primary);
       font-size: 12.5px;
       cursor: pointer;
+      min-height: 34px;
     }
 
     /* Media Card Grid */
@@ -845,12 +954,14 @@
       background: rgba(26, 29, 36, 0.45);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
+      -webkit-overflow-scrolling: touch;
     }
 
     .track-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
+      min-width: 560px;
     }
 
     .track-table th {
@@ -1023,6 +1134,7 @@
       box-shadow: var(--shadow-md);
       position: relative;
       transition: transform var(--transition-smooth), width var(--transition-smooth), border-radius var(--transition-smooth), padding var(--transition-smooth);
+      min-width: 0;
     }
 
     /* Mobile top mini-progress bar attached inside the floating card */
@@ -1136,6 +1248,7 @@
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       transition: all var(--transition-fast);
+      min-height: 30px;
     }
 
     .speed-chip-btn:hover {
@@ -1172,6 +1285,7 @@
       justify-content: center;
       transition: all var(--transition-fast);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
     }
 
     .play-main-btn:hover:not(:disabled) {
@@ -1221,6 +1335,16 @@
       cursor: pointer;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
       transition: transform var(--transition-fast);
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     }
 
     .range-slider:hover::-webkit-slider-thumb {
@@ -1307,6 +1431,7 @@
       font-weight: 600;
       text-align: center;
       transition: all var(--transition-fast);
+      min-height: 38px;
     }
 
     .expanded-tab-btn.active {
@@ -1497,6 +1622,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .expanded-queue-list {
@@ -1536,6 +1663,7 @@
       padding: 20px;
       gap: 16px;
       overflow: hidden;
+      width: 100%;
     }
 
     .video-frame-container {
@@ -1582,11 +1710,13 @@
       inset: 0;
       background: rgba(0, 0, 0, 0.72);
       backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
       z-index: 150;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
+      overflow-y: auto;
     }
 
     .modal-backdrop.open {
@@ -1604,6 +1734,7 @@
       flex-direction: column;
       box-shadow: var(--shadow-lg);
       overflow: hidden;
+      margin: auto;
     }
 
     .modal-card.wide {
@@ -1616,11 +1747,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 10px;
     }
 
     .modal-header h3 {
       font-size: 17px;
       font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .modal-body {
@@ -1638,6 +1773,7 @@
       align-items: center;
       justify-content: flex-end;
       gap: 10px;
+      flex-wrap: wrap;
     }
 
     .form-group {
@@ -1658,7 +1794,12 @@
       border-radius: var(--radius-sm);
       padding: 10px 12px;
       color: var(--text-primary);
-      font-size: 13.5px;
+      font-size: 16px;
+      min-height: 42px;
+    }
+
+    @media (min-width: 700px) {
+      .form-input { font-size: 13.5px; }
     }
 
     .form-input:focus {
@@ -1673,6 +1814,7 @@
       border-radius: var(--radius-lg);
       background: rgba(9, 10, 12, 0.88);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 200;
       display: none;
       flex-direction: column;
@@ -1680,6 +1822,8 @@
       justify-content: center;
       gap: 12px;
       pointer-events: none;
+      text-align: center;
+      padding: 24px;
     }
 
     .dropzone-overlay.active {
@@ -1696,6 +1840,7 @@
       flex-direction: column;
       gap: 8px;
       pointer-events: none;
+      max-width: 360px;
     }
 
     .toast {
@@ -1713,6 +1858,7 @@
       pointer-events: auto;
       animation: fadeIn 200ms ease-out;
       max-width: 360px;
+      transition: opacity 250ms ease;
     }
 
     .toast.error {
@@ -1747,6 +1893,7 @@
       overflow-x: auto;
       white-space: pre-wrap;
       user-select: text;
+      line-height: 1.6;
     }
 
     /* Mobile Bottom Navigation */
@@ -1793,8 +1940,37 @@
     }
 
     /* ==========================================================================
-       8. RESPONSIVE BREAKPOINTS (Tablet & Mobile — No Edge Blending!)
+       8. TOUCH DEVICE ENHANCEMENTS (hover: none)
        ========================================================================== */
+    @media (hover: none) {
+      .media-card .card-play-fab {
+        opacity: 0.96;
+        transform: translateY(0);
+      }
+      .player-art-wrap .player-art-expand-hint {
+        opacity: 0;
+      }
+      .expanded-art-container .expanded-art-overlay-actions {
+        opacity: 1;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+        padding: 8px;
+      }
+      .player-art-cam-btn {
+        opacity: 1;
+      }
+      .icon-btn:hover,
+      .nav-item:hover,
+      .media-card:hover,
+      .btn:hover {
+        transform: none;
+      }
+    }
+
+    /* ==========================================================================
+       9. RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+
+    /* ---------------- TABLET & SMALL LAPTOP (<= 960px) ---------------- */
     @media (max-width: 960px) {
       .expanded-pull-handle {
         display: block;
@@ -1828,6 +2004,7 @@
       }
     }
 
+    /* ---------------- MOBILE & TABLET PORTRAIT (<= 900px) ---------------- */
     @media (max-width: 900px) {
       .app-shell {
         grid-template-columns: 1fr;
@@ -1875,7 +2052,7 @@
         padding-bottom: calc(var(--player-height-mobile) + var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px) + 44px);
       }
 
-      /* FLOATING GLASSMORPHIC MINI-PLAYER (Fixes Mobile Edge Blending) */
+      /* FLOATING GLASSMORPHIC MINI-PLAYER */
       .player-bar {
         position: fixed;
         left: 10px;
@@ -1896,7 +2073,6 @@
         z-index: 60;
       }
 
-      /* Optional collapsed floating pill mode on mobile */
       .player-bar.mini-collapsed {
         left: auto;
         right: 12px;
@@ -1978,15 +2154,20 @@
         bottom: calc(var(--player-height-mobile) + var(--mobile-nav-height) + env(safe-area-inset-bottom, 0px) + 18px);
         left: 12px;
         right: 12px;
+        max-width: none;
       }
 
-      /* Show the double-tap hint prominently on touch devices */
+      .toast {
+        max-width: none;
+      }
+
       .expanded-art-seek-hint {
         font-size: 12px;
         color: var(--text-secondary);
       }
     }
 
+    /* ---------------- PHONE (<= 640px) ---------------- */
     @media (max-width: 640px) {
       .card-grid {
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -2006,9 +2187,21 @@
         width: 46px;
       }
 
+      .cloud-status-chip #cloudHeaderText {
+        display: none;
+      }
+
+      .cloud-status-chip {
+        padding: 5px 9px;
+      }
+
       /* Clean touch-friendly track cards on phone screens */
       .track-table thead {
         display: none;
+      }
+
+      .track-table {
+        min-width: 0;
       }
 
       .track-table,
@@ -2065,17 +2258,119 @@
         padding: 10px 12px;
       }
 
-      /* Slightly larger seek flash for thumb-friendly feedback */
       .art-seek-flash {
         width: 74px;
         height: 74px;
         font-size: 12px;
       }
+
+      .modal-card {
+        max-height: 94vh;
+      }
+
+      .search-header-card {
+        padding: 14px 16px;
+      }
+    }
+
+    /* ---------------- MOBILE LANDSCAPE ---------------- */
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+      .player-bar {
+        height: 58px;
+        padding: 4px 10px;
+      }
+      .player-art-wrap {
+        width: 40px;
+        height: 40px;
+      }
+      .mobile-bottom-nav {
+        --mobile-nav-height: 52px;
+      }
+      .main-scroll {
+        padding-bottom: calc(var(--player-height-mobile) + var(--mobile-nav-height) + 20px);
+      }
+    }
+
+    /* ==========================================================================
+       10. LARGE DISPLAYS: DESKTOP XL, 2K, 4K TV
+       ========================================================================== */
+
+    /* ---------------- LARGE DESKTOP / SMALL TV (>= 1440px) ---------------- */
+    @media (min-width: 1440px) {
+      :root {
+        --sidebar-width: 280px;
+        --player-height: 100px;
+      }
+      .main-scroll { padding: 28px 32px; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+      .expanded-body { max-width: 1400px; }
+      .hero-text h1 { font-size: 28px; }
+      .section-title { font-size: 20px; }
+    }
+
+    /* ---------------- FULL HD / 2K TV (>= 1800px) ---------------- */
+    @media (min-width: 1800px) {
+      html, body { font-size: 15px; }
+      :root {
+        --sidebar-width: 320px;
+        --player-height: 112px;
+        --radius-md: 16px;
+        --radius-lg: 24px;
+        --app-padding: 14px;
+      }
+      .main-scroll { padding: 36px 44px; gap: 36px; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; }
+      .track-table th, .track-row td { padding: 14px 18px; font-size: 14.5px; }
+      .hero-text h1 { font-size: 32px; }
+      .section-title { font-size: 22px; }
+      .nav-item { padding: 12px 16px; font-size: 14.5px; }
+      .btn { padding: 11px 20px; font-size: 14px; }
+      .play-main-btn { width: 48px; height: 48px; }
+      .play-main-btn svg { width: 22px; height: 22px; }
+      .expanded-body { max-width: 1600px; gap: 48px; }
+      .expanded-art-container { width: clamp(240px, 42vw, 400px); height: clamp(240px, 42vw, 400px); }
+    }
+
+    /* ---------------- 4K TV (>= 2400px) ---------------- */
+    @media (min-width: 2400px) {
+      html, body { font-size: 18px; }
+      :root {
+        --sidebar-width: 380px;
+        --player-height: 136px;
+        --radius-md: 18px;
+        --radius-lg: 28px;
+        --app-padding: 18px;
+      }
+      .main-scroll { padding: 48px 64px; gap: 44px; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 28px; }
+      .nav-item { padding: 16px 22px; font-size: 17px; }
+      .nav-item svg { width: 22px; height: 22px; }
+      .btn { padding: 14px 26px; font-size: 16px; min-height: 46px; }
+      .btn svg { width: 20px; height: 20px; }
+      .icon-btn { width: 48px; height: 48px; }
+      .icon-btn svg { width: 24px; height: 24px; }
+      .play-main-btn { width: 60px; height: 60px; }
+      .play-main-btn svg { width: 26px; height: 26px; }
+      .hero-text h1 { font-size: 40px; }
+      .section-title { font-size: 26px; }
+      .expanded-body { max-width: 2000px; }
+    }
+
+    /* ---------------- FORCE SAFE AREA ON TV / OVERSIZED DISPLAYS ---------------- */
+    @media (min-width: 1800px) {
+      .app-shell {
+        padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+      }
+    }
+
+    /* Reduced-motion scroll-behavior */
+    @media (prefers-reduced-motion: reduce) {
+      .main-scroll { scroll-behavior: auto; }
     }
   </style>
 </head>
 <body>
-  <!-- Hidden File Inputs for Importing Audio, Video, Folders, Subtitles, Backups -->
+  <!-- Hidden File Inputs -->
   <input type="file" id="fileInputFiles" multiple accept="audio/*,video/*,.mp3,.wav,.ogg,.m4a,.aac,.flac,.mp4,.webm" style="display:none" />
   <input type="file" id="fileInputFolder" webkitdirectory directory multiple style="display:none" />
   <input type="file" id="subtitleInput" accept=".vtt,.srt" style="display:none" />
@@ -2121,7 +2416,7 @@
 
       <div class="sidebar-scroll">
         <div>
-          <div class="nav-group-label">Discover & Hybrid</div>
+          <div class="nav-group-label">Discover &amp; Hybrid</div>
           <ul class="nav-list">
             <li>
               <button class="nav-item active" data-view="home" onclick="app.navigate('home')">
@@ -2153,7 +2448,7 @@
             <li>
               <button class="nav-item" data-view="search" onclick="app.navigate('search')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span>Search & Filter</span>
+                <span>Search &amp; Filter</span>
               </button>
             </li>
           </ul>
@@ -2193,7 +2488,7 @@
 
         <div>
           <div class="nav-group-label">
-            <span>Playlists & Activity</span>
+            <span>Playlists &amp; Activity</span>
             <button class="btn-ghost" style="padding:2px 6px;font-size:11px;color:var(--accent-primary)" onclick="app.openCreatePlaylistModal()" title="Create Playlist">+ New</button>
           </div>
           <ul class="nav-list">
@@ -2220,13 +2515,13 @@
             <li>
               <button class="nav-item" data-view="storage" onclick="app.navigate('storage')">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                <span>Storage & Backup</span>
+                <span>Storage &amp; Backup</span>
               </button>
             </li>
             <li>
               <button class="nav-item" data-view="docs" onclick="app.openDocsModal()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                <span>PWA & Setup Docs</span>
+                <span>PWA &amp; Setup Docs</span>
               </button>
             </li>
           </ul>
@@ -2234,7 +2529,7 @@
         </div>
       </div>
 
-          <div class="sidebar-actions">
+      <div class="sidebar-actions">
         <button class="btn btn-primary" onclick="app.openImportModal()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <span>Import / Upload</span>
@@ -2260,7 +2555,7 @@
           </button>
           <div class="search-input-wrap">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="globalSearchInput" class="search-input" placeholder="Search Local & Cloud songs, artists, albums, videos... (Ctrl+F)" aria-label="Search library" />
+            <input type="text" id="globalSearchInput" class="search-input" placeholder="Search Local &amp; Cloud songs, artists, albums, videos..." aria-label="Search library" autocomplete="off" spellcheck="false" />
             <button id="searchClearBtn" class="search-clear-btn" onclick="app.clearSearch()" aria-label="Clear search">&times;</button>
           </div>
         </div>
@@ -2270,7 +2565,7 @@
             <span id="cloudHeaderDot" class="cloud-status-dot"></span>
             <span id="cloudHeaderText">Supabase Setup</span>
           </div>
-          <div class="mini-visualizer-wrap" onclick="app.cycleVisualizerMode()" title="Click to change Audio Visualizer mode (Bars / Wave / Radial / Off)">
+          <div class="mini-visualizer-wrap" onclick="app.cycleVisualizerMode()" title="Click to change Audio Visualizer mode">
             <canvas id="headerVisualizerCanvas" width="136" height="44"></canvas>
             <span id="vizModeLabel" style="font-size:11px;color:var(--text-secondary);font-weight:600">Bars</span>
           </div>
@@ -2281,12 +2576,12 @@
         </div>
       </header>
 
-      <!-- Import Progress Banner (Hidden unless active) -->
+      <!-- Import Progress Banner -->
       <div id="importProgressBanner" style="display:none;background:var(--bg-elevated);padding:10px 24px;border-bottom:1px solid var(--border-subtle);align-items:center;justify-content:space-between;gap:12px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="color:var(--accent-primary);font-weight:700;" id="importStatusText">Importing files...</span>
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+          <span style="color:var(--accent-primary);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="importStatusText">Importing files...</span>
         </div>
-        <div style="flex:1;max-width:300px;height:6px;background:var(--bg-active);border-radius:99px;overflow:hidden;">
+        <div style="flex:1;max-width:300px;height:6px;background:var(--bg-active);border-radius:99px;overflow:hidden;min-width:100px;">
           <div id="importProgressBar" style="height:100%;width:0%;background:var(--accent-primary);transition:width 150ms;"></div>
         </div>
       </div>
@@ -2295,14 +2590,12 @@
       <div id="mainScrollView" class="main-scroll" role="region" aria-label="Content View"></div>
     </main>
 
-    <!-- 3. BOTTOM PLAYBACK BAR (Desktop 3-Column + Floating Glassmorphic Mobile Card) -->
+    <!-- 3. BOTTOM PLAYBACK BAR -->
     <footer id="playerBar" class="player-bar" aria-label="Media Player Controls">
-      <!-- Attached Top Progress Rail for Mobile Floating Mini-Player -->
       <div class="mini-progress-rail" aria-hidden="true">
         <div id="miniProgressFill" class="mini-progress-fill"></div>
       </div>
 
-      <!-- Left: Now Playing Info -->
       <div class="player-now-playing">
         <div class="player-art-wrap" onclick="app.toggleExpandedPlayer()" title="Click to open Expanded Player">
           <img id="playerBarArt" src="" alt="Track Artwork" />
@@ -2322,7 +2615,6 @@
         </button>
       </div>
 
-      <!-- Mobile Touch-Friendly Mini-Player Controls -->
       <div class="mobile-mini-actions">
         <button class="play-main-btn" onclick="event.stopPropagation(); app.togglePlayPause()" aria-label="Play or Pause" title="Play/Pause">
           <svg id="iconPlayMobileMini" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
@@ -2338,7 +2630,6 @@
         </button>
       </div>
 
-      <!-- Center: Transport & Seek Bar (Desktop) -->
       <div class="player-center">
         <div class="player-transport">
           <button id="btnShuffle" class="icon-btn" onclick="app.toggleShuffle()" aria-label="Shuffle" title="Shuffle">
@@ -2366,7 +2657,6 @@
         </div>
       </div>
 
-      <!-- Right: Speed, Volume, Queue & Expand (Desktop) -->
       <div class="player-right">
         <button id="btnAudioSpeed" class="speed-chip-btn" onclick="app.cycleAudioSpeed()" title="Audio Playback Speed">1.0x</button>
         <div class="volume-control-group">
@@ -2375,7 +2665,7 @@
           </button>
           <input type="range" id="volumeSlider" class="range-slider" min="0" max="1" step="0.01" value="0.85" aria-label="Volume" />
         </div>
-        <button class="icon-btn" onclick="app.toggleExpandedPlayer()" aria-label="Open Queue and Expanded Player" title="Expanded Player & Queue">
+        <button class="icon-btn" onclick="app.toggleExpandedPlayer()" aria-label="Open Queue and Expanded Player" title="Expanded Player &amp; Queue">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
         </button>
       </div>
@@ -2406,15 +2696,13 @@
     </nav>
   </div>
 
-  <!-- ==========================================================================
-       EXPANDED AUDIO PLAYER & QUEUE OVERLAY
-       ========================================================================== -->
+  <!-- EXPANDED AUDIO PLAYER & QUEUE OVERLAY -->
   <div id="expandedPlayerOverlay" class="overlay-panel" aria-hidden="true">
     <div class="expanded-pull-handle" onclick="app.toggleExpandedPlayer()" title="Minimize Player"></div>
     <div class="expanded-header">
-      <div style="display:flex;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
         <span class="brand-badge">Now Playing</span>
-        <span id="expandedAlbumLabel" style="color:var(--text-secondary);font-size:13px;">Local Library</span>
+        <span id="expandedAlbumLabel" style="color:var(--text-secondary);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Local Library</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <button id="btnExpandedAudioSpeed" class="speed-chip-btn" onclick="app.cycleAudioSpeed()" title="Audio Playback Speed">1.0x</button>
@@ -2425,7 +2713,6 @@
       </div>
     </div>
 
-    <!-- Mobile / Tablet View Switcher Tabs (Now Playing vs Up Next Queue) -->
     <div class="expanded-mobile-tabs">
       <button id="expTabBtnStage" class="expanded-tab-btn active" onclick="app.setExpandedMobileTab('stage')">Now Playing</button>
       <button id="expTabBtnQueue" class="expanded-tab-btn" onclick="app.setExpandedMobileTab('queue')">Up Next Queue</button>
@@ -2436,7 +2723,6 @@
         <div class="expanded-art-container" id="expandedArtContainer" title="Double-tap / double-click the cover: left side = rewind 5s, right side = forward 5s" aria-label="Cover art. Double-tap left to rewind 5 seconds, right to forward 5 seconds.">
           <img id="expandedArtImg" src="" alt="Expanded Cover Artwork" />
 
-          <!-- Double-tap / double-click seek feedback overlays -->
           <div id="artSeekFlashLeft" class="art-seek-flash left" aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
             <span>5s</span>
@@ -2499,7 +2785,6 @@
         </div>
       </div>
 
-      <!-- Queue Management Panel -->
       <div class="expanded-queue-box">
         <div class="expanded-queue-header">
           <div>
@@ -2513,16 +2798,14 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       DEDICATED VIDEO PLAYER OVERLAY
-       ========================================================================== -->
+  <!-- DEDICATED VIDEO PLAYER OVERLAY -->
   <div id="videoPlayerOverlay" class="overlay-panel" aria-hidden="true">
     <div class="expanded-header">
-      <div>
-        <h3 id="videoPlayerTitle" style="font-size:18px;font-weight:700;">Video Player</h3>
-        <span id="videoPlayerMeta" style="font-size:12px;color:var(--text-secondary)">Local Video</span>
+      <div style="min-width:0;">
+        <h3 id="videoPlayerTitle" style="font-size:18px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Video Player</h3>
+        <span id="videoPlayerMeta" style="font-size:12px;color:var(--text-secondary);">Local Video</span>
       </div>
-      <div style="display:flex;align-items:center;gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <button class="btn btn-secondary" onclick="document.getElementById('subtitleInput').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="14" x2="18" y2="14"/><line x1="6" y1="17" x2="14" y2="17"/></svg>
           <span>Load Subtitle (.vtt/.srt)</span>
@@ -2546,7 +2829,7 @@
         </div>
 
         <div class="video-controls-row">
-          <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <button class="icon-btn" onclick="app.prevVideo()" aria-label="Previous Video" title="Previous Video">
               <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"/></svg>
             </button>
@@ -2569,7 +2852,7 @@
             </div>
           </div>
 
-          <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
             <label for="vidSpeedSelect" style="font-size:12px;color:var(--text-secondary)">Speed:</label>
             <select id="vidSpeedSelect" class="sort-select" onchange="app.setVideoSpeed(this.value)">
               <option value="0.5">0.5x</option>
@@ -2587,9 +2870,7 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       UNIVERSAL MODAL DIALOG (Import, Create Playlist, Edit Metadata, Duplicate, Confirm, Docs)
-       ========================================================================== -->
+  <!-- UNIVERSAL MODAL DIALOG -->
   <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true">
     <div id="modalCard" class="modal-card">
       <div class="modal-header">
@@ -2601,23 +2882,11 @@
     </div>
   </div>
 
-  <!-- ==========================================================================
-       JAVASCRIPT APPLICATION ARCHITECTURE
-       Modules:
-       1. ArtworkGenerator (Procedural Canvas Covers)
-       2. ID3Parser (Binary ID3v2 Title/Artist/Album/APIC Artwork Extractor)
-       3. MediaDB (IndexedDB Persistent Blob & Metadata Engine)
-       4. DemoGenerator (Built-in WebAudio WAV & Canvas WebM synthesizer for instant testing)
-       5. VisualizerEngine (Web Audio API AnalyserNode + Canvas)
-       6. ASfyApp (State, Audio/Video Playback, Playlists, Search, Backup, UI)
-       ========================================================================== -->
   <script>
     "use strict";
 
     /* ==========================================================================
-       0. EMBEDDED SUPABASE KEYS FOR DIRECT NETLIFY DRAG-AND-DROP DEPLOYMENT
-       Paste your Supabase Project URL and Anon/Public API Key below!
-       (Or click the "Supabase Setup" chip in the top bar of the app at any time).
+       0. EMBEDDED SUPABASE CONFIG
        ========================================================================== */
     const ASFY_EMBEDDED_CLOUD_CONFIG = {
       provider: "supabase",
@@ -2628,7 +2897,7 @@
     };
 
     /* --------------------------------------------------------------------------
-       1. PROCEDURAL ARTWORK GENERATOR (Canvas DataURL for tracks without art)
+       1. PROCEDURAL ARTWORK GENERATOR
        -------------------------------------------------------------------------- */
     const ArtworkGenerator = {
       cache: new Map(),
@@ -2641,7 +2910,6 @@
         canvas.height = 300;
         const ctx = canvas.getContext("2d");
 
-        // Hash string to deterministic palette
         let hash = 0;
         for (let i = 0; i < key.length; i++) {
           hash = key.charCodeAt(i) + ((hash << 5) - hash);
@@ -2655,7 +2923,6 @@
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, 300, 300);
 
-        // Decorative geometric vinyl/wave rings
         ctx.strokeStyle = "rgba(181, 255, 43, 0.18)";
         ctx.lineWidth = 2;
         for (let r = 40; r <= 120; r += 22) {
@@ -2664,12 +2931,10 @@
           ctx.stroke();
         }
 
-        // Badge
         ctx.fillStyle = "rgba(181, 255, 43, 0.9)";
         ctx.font = "700 13px sans-serif";
         ctx.fillText(isVideo ? "ASFY VIDEO" : "ASFY AUDIO", 24, 38);
 
-        // Initials / Title
         const cleanTitle = (seedText || "Track").trim();
         ctx.fillStyle = "#ffffff";
         ctx.font = "800 30px sans-serif";
@@ -2710,19 +2975,16 @@
         };
 
         try {
-          // Read first 256KB for ID3v2 header & frames
           const slice = file.slice(0, 262144);
           const buffer = await slice.arrayBuffer();
           const view = new DataView(buffer);
 
           if (buffer.byteLength < 10) return result;
-          // Check "ID3" magic bytes
           if (view.getUint8(0) !== 0x49 || view.getUint8(1) !== 0x44 || view.getUint8(2) !== 0x33) {
             return result;
           }
 
           const version = view.getUint8(3);
-          // Synchsafe integer for tag size
           const tagSize =
             ((view.getUint8(6) & 0x7f) << 21) |
             ((view.getUint8(7) & 0x7f) << 14) |
@@ -2765,7 +3027,6 @@
                 if (frameId === "TRCK") result.trackNumber = text;
               }
             } else if (frameId === "APIC" && !result.artwork) {
-              // Properly await the async FileReader DataURL extraction so result.artwork is a string, not a Promise!
               result.artwork = await this.decodeAPICFrame(buffer, frameDataOffset, frameSize);
             }
 
@@ -2796,15 +3057,14 @@
       decodeAPICFrame(buffer, offset, length) {
         try {
           const bytes = new Uint8Array(buffer, offset, length);
-          let pos = 1; // skip encoding byte
+          let pos = 1;
           let mime = "";
           while (pos < bytes.length && bytes[pos] !== 0) {
             mime += String.fromCharCode(bytes[pos]);
             pos++;
           }
-          pos++; // skip null terminator
-          pos++; // skip picture type byte
-          // skip description null-terminated string
+          pos++;
+          pos++;
           while (pos < bytes.length && bytes[pos] !== 0) pos++;
           while (pos < bytes.length && bytes[pos] === 0) pos++;
 
@@ -2824,7 +3084,7 @@
     };
 
     /* --------------------------------------------------------------------------
-       3. PERSISTENT INDEXEDDB STORAGE ENGINE (Blobs + Metadata + Playlists)
+       3. PERSISTENT INDEXEDDB STORAGE ENGINE
        -------------------------------------------------------------------------- */
     const MediaDB = {
       dbName: "ASfyLocalMediaDB",
@@ -2945,8 +3205,7 @@
     };
 
     /* --------------------------------------------------------------------------
-       4. PROCEDURAL SAMPLE AUDIO GENERATOR (Creates real playable WAV Blobs
-          locally so users can test all features immediately or import their own)
+       4. PROCEDURAL SAMPLE AUDIO GENERATOR
        -------------------------------------------------------------------------- */
     const DemoGenerator = {
       createSynthWavBlob(notesFreq, durationSec = 8) {
@@ -2964,8 +3223,8 @@
         writeString(8, "WAVE");
         writeString(12, "fmt ");
         view.setUint32(16, 16, true);
-        view.setUint16(20, 1, true); // PCM
-        view.setUint16(22, 1, true); // Mono
+        view.setUint16(20, 1, true);
+        view.setUint16(22, 1, true);
         view.setUint32(24, sampleRate, true);
         view.setUint32(28, sampleRate * 2, true);
         view.setUint16(32, 2, true);
@@ -2979,7 +3238,6 @@
           const freq = notesFreq[step];
           const beatTime = (t * 2) % 1;
           const env = Math.exp(-beatTime * 3.5);
-          // Warm synth chord + sub bass
           const sig =
             0.45 * Math.sin(2 * Math.PI * freq * t) * env +
             0.25 * Math.sin(2 * Math.PI * (freq * 1.5) * t) * env +
@@ -2999,7 +3257,7 @@
       audioCtx: null,
       analyser: null,
       sourceNode: null,
-      mode: "bars", // bars | wave | radial | off
+      mode: "bars",
       animId: null,
 
       connectAudio(audioElement) {
@@ -3122,30 +3380,30 @@
         artworkTargetId: null,
         pendingEditArtworkDataUrl: undefined,
         pendingImportFiles: [],
-        uploadDestination: "local", // local | cloud | both
+        uploadDestination: "local",
         cloudConfig: { ...ASFY_EMBEDDED_CLOUD_CONFIG },
         deletedCloudPaths: [],
         activeCloudFetchAbort: null,
         isPlaying: false,
         shuffle: false,
-        repeat: "off", // off | all | one
-        videoRepeat: "off", // off | one | all
+        repeat: "off",
+        videoRepeat: "off",
         audioSpeed: 1.0,
         miniCollapsed: false,
         volume: 0.85,
         muted: false,
         searchQuery: "",
-        searchFilter: "all", // all | songs | videos | artists | albums | playlists | local | cloud
-        sortBy: "recent" // recent | alpha | artist | duration
+        searchFilter: "all",
+        sortBy: "recent"
       },
 
       audio: new Audio(),
       activeObjectUrl: null,
       activeVideoUrl: null,
 
-      // Throttle guard so dblclick + double-tap never double-fire a seek
       _lastArtSeekAt: 0,
       _artFlashTimer: null,
+      _searchDebounceTimer: null,
 
       async init() {
         this.audio.crossOrigin = "anonymous";
@@ -3164,7 +3422,6 @@
         this.bindKeyboardShortcuts();
         this.updateCloudHeaderChip();
 
-        // Restore last active track metadata into player bar if available
         if (this.state.currentTrackId) {
           const lastTrack = this.state.mediaItems.find(m => m.id === this.state.currentTrackId && m.type === "audio");
           if (lastTrack) {
@@ -3176,7 +3433,6 @@
 
         this.renderView();
 
-        // Automatically sync Supabase library if credentials are configured
         if (this.isCloudConfigured()) {
           this.syncSupabaseLibrary(false);
         }
@@ -3236,10 +3492,10 @@
             <p style="color:var(--text-secondary);font-size:12.5px;">
               Use your own <strong>Supabase Storage Bucket</strong> to upload, sync, and stream your music and videos across all devices. Zero backend server or SQL tables required—ASfy stores both your media files and an automatic <code>asfy_manifest.json</code> index (including cover art &amp; metadata) directly inside your bucket!
             </p>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border-subtle);">
-              <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border-subtle);flex-wrap:wrap;gap:8px;">
+              <div style="min-width:0;">
                 <div style="font-weight:700;font-size:13px;">Status: ${isConfigured ? '<span style="color:var(--accent-primary)">Supabase Configured</span>' : '<span style="color:var(--warning)">Keys Required</span>'}</div>
-                <div style="font-size:11.5px;color:var(--text-secondary);">Bucket: <code>${this.escapeHtml(cfg.bucketName || 'asfy-media')}</code> / Folder: <code>${this.escapeHtml(cfg.folderPath || 'library')}</code></div>
+                <div style="font-size:11.5px;color:var(--text-secondary);word-break:break-all;">Bucket: <code>${this.escapeHtml(cfg.bucketName || 'asfy-media')}</code> / Folder: <code>${this.escapeHtml(cfg.folderPath || 'library')}</code></div>
               </div>
               ${isConfigured ? `
                 <button class="btn btn-danger" style="padding:6px 12px;font-size:12px;" onclick="app.disconnectSupabase()">Clear Keys</button>
@@ -3398,7 +3654,6 @@
           const key = item.objectPath || item.publicId;
           if (!key) continue;
 
-          // Ensure cover artwork is compact and serializable in the manifest
           let artToStore = null;
           if (typeof item.artwork === "string" && item.artwork.startsWith("data:image/")) {
             artToStore = await this.compressDataUrlForManifest(item.artwork, 240);
@@ -3463,7 +3718,6 @@
         const encodedPath = cleanPath.split("/").map(encodeURIComponent).join("/");
         let deletedRemotely = false;
 
-        // Method 1: Single-object DELETE endpoint (/storage/v1/object/{bucket}/{wildcardPath})
         try {
           const singleRes = await fetch(
             `${supabaseUrl}/storage/v1/object/${encodeURIComponent(bucketName)}/${encodedPath}`,
@@ -3479,7 +3733,6 @@
           console.warn("Single-path Supabase delete attempt note:", e);
         }
 
-        // Method 2: Batch prefixes DELETE endpoint (/storage/v1/object/{bucket})
         if (!deletedRemotely) {
           try {
             const batchRes = await fetch(
@@ -3518,7 +3771,6 @@
         if (sourceFilter === "cloud") {
           return active.filter(m => m.storageSource === "cloud");
         }
-        // Group items that exist in BOTH Local and Cloud so there are no accidental duplicates
         const map = new Map();
         const unified = [];
         for (const item of active) {
@@ -3572,8 +3824,10 @@
 
         this.audio.volume = this.state.volume;
         this.audio.playbackRate = this.state.audioSpeed || 1.0;
-        document.getElementById("volumeSlider").value = this.state.volume;
-        document.getElementById("vizModeLabel").textContent =
+        const volSlider = document.getElementById("volumeSlider");
+        if (volSlider) volSlider.value = this.state.volume;
+        const vizLabel = document.getElementById("vizModeLabel");
+        if (vizLabel) vizLabel.textContent =
           VisualizerEngine.mode.charAt(0).toUpperCase() + VisualizerEngine.mode.slice(1);
         this.syncAudioSpeedUI();
         this.syncTransportButtonsUI();
@@ -3653,18 +3907,17 @@
         const cloudOnly = active.filter(m => m.storageSource === "cloud");
         const allUnified = this.getUnifiedMediaList("all");
 
-        document.getElementById("navCountSongs").textContent = songs.length;
-        document.getElementById("navCountVideos").textContent = videos.length;
-        document.getElementById("navCountPlaylists").textContent = this.state.playlists.length;
-        document.getElementById("navCountFavorites").textContent = favs.length;
-        const elAll = document.getElementById("navCountAllMedia");
-        const elLoc = document.getElementById("navCountLocal");
-        const elCld = document.getElementById("navCountCloud");
-        if (elAll) elAll.textContent = allUnified.length;
-        if (elLoc) elLoc.textContent = localOnly.length;
-        if (elCld) elCld.textContent = cloudOnly.length;
+        const el = (id) => document.getElementById(id);
+        if (el("navCountSongs")) el("navCountSongs").textContent = songs.length;
+        if (el("navCountVideos")) el("navCountVideos").textContent = videos.length;
+        if (el("navCountPlaylists")) el("navCountPlaylists").textContent = this.state.playlists.length;
+        if (el("navCountFavorites")) el("navCountFavorites").textContent = favs.length;
+        if (el("navCountAllMedia")) el("navCountAllMedia").textContent = allUnified.length;
+        if (el("navCountLocal")) el("navCountLocal").textContent = localOnly.length;
+        if (el("navCountCloud")) el("navCountCloud").textContent = cloudOnly.length;
 
         const plContainer = document.getElementById("sidebarUserPlaylists");
+        if (!plContainer) return;
         plContainer.innerHTML = this.state.playlists.map(pl => `
           <li>
             <button class="nav-item ${this.state.currentView === 'playlist-detail' && this.state.selectedPlaylistId === pl.id ? 'active' : ''}"
@@ -3688,6 +3941,9 @@
         this.closeMobileSidebar();
         this.updateSidebarCounts();
         this.renderView();
+        // Scroll content to top on nav change
+        const scroll = document.getElementById("mainScrollView");
+        if (scroll) scroll.scrollTop = 0;
       },
 
       toggleMobileSidebar() {
@@ -3704,6 +3960,7 @@
 
       renderView() {
         const container = document.getElementById("mainScrollView");
+        if (!container) return;
         const view = this.state.currentView;
 
         if (view === "home") this.renderHomeView(container);
@@ -3767,6 +4024,240 @@
       },
 
       /* ------------------------------------------------------------------------
+         SEARCH VIEW — FULL FILTERING BY TYPE
+         ------------------------------------------------------------------------ */
+      renderSearchView(container) {
+        const rawQuery = this.state.searchQuery.trim();
+        const q = rawQuery.toLowerCase();
+        const filter = this.state.searchFilter;
+        const sort = this.state.sortBy;
+        const active = this.getActiveMediaItems();
+
+        const matches = (str) => !q || String(str || "").toLowerCase().includes(q);
+
+        const allAudio = active.filter(m => m.type === "audio");
+        const allVideos = active.filter(m => m.type === "video");
+
+        // Match songs & videos by text
+        let matchedSongs = q
+          ? allAudio.filter(m => matches(m.title) || matches(m.artist) || matches(m.album) || matches(m.fileName))
+          : allAudio.slice();
+
+        let matchedVideos = q
+          ? allVideos.filter(m => matches(m.title) || matches(m.artist) || matches(m.album) || matches(m.fileName))
+          : allVideos.slice();
+
+        // Apply source filter
+        if (filter === "local") {
+          matchedSongs = matchedSongs.filter(m => (m.storageSource || "local") === "local");
+          matchedVideos = matchedVideos.filter(m => (m.storageSource || "local") === "local");
+        } else if (filter === "cloud") {
+          matchedSongs = matchedSongs.filter(m => m.storageSource === "cloud");
+          matchedVideos = matchedVideos.filter(m => m.storageSource === "cloud");
+        }
+
+        // Build matched albums (album name OR any track matches query)
+        const albumMap = new Map();
+        allAudio.forEach(s => {
+          const albumName = s.album || "Unknown Album";
+          const inMatchedSongs = matchedSongs.some(x => x.id === s.id);
+          if (q && !inMatchedSongs && !matches(albumName)) return;
+          if (!albumMap.has(albumName)) albumMap.set(albumName, { name: albumName, artist: s.artist, tracks: [], art: this.getItemEffectiveArtwork(s) });
+          albumMap.get(albumName).tracks.push(s);
+        });
+        const matchedAlbums = Array.from(albumMap.values());
+
+        // Build matched artists
+        const artistMap = new Map();
+        allAudio.forEach(s => {
+          const artistName = s.artist || "Unknown Artist";
+          const inMatchedSongs = matchedSongs.some(x => x.id === s.id);
+          if (q && !inMatchedSongs && !matches(artistName)) return;
+          if (!artistMap.has(artistName)) artistMap.set(artistName, { name: artistName, tracks: [], art: this.getItemEffectiveArtwork(s) });
+          artistMap.get(artistName).tracks.push(s);
+        });
+        const matchedArtists = Array.from(artistMap.values());
+
+        // Playlists
+        const matchedPlaylists = this.state.playlists.filter(p => {
+          if (!q) return true;
+          if (matches(p.name) || matches(p.description)) return true;
+          return p.trackIds.some(id => matchedSongs.some(s => s.id === id));
+        });
+
+        // Sorting
+        matchedSongs = this.sortMediaList(matchedSongs, sort);
+        matchedVideos = this.sortMediaList(matchedVideos, sort);
+
+        // Which categories to display
+        const showSongs = filter === "all" || filter === "songs" || filter === "local" || filter === "cloud";
+        const showVideos = filter === "all" || filter === "videos" || filter === "local" || filter === "cloud";
+        const showAlbums = filter === "all" || filter === "albums";
+        const showArtists = filter === "all" || filter === "artists";
+        const showPlaylists = filter === "all" || filter === "playlists";
+
+        // Truncation in "all" mode
+        const displaySongs = showSongs
+          ? (filter === "all" ? matchedSongs.slice(0, 12) : matchedSongs)
+          : [];
+        const displayVideos = showVideos
+          ? (filter === "all" ? matchedVideos.slice(0, 6) : matchedVideos)
+          : [];
+        const displayAlbums = showAlbums
+          ? (filter === "all" ? matchedAlbums.slice(0, 8) : matchedAlbums)
+          : [];
+        const displayArtists = showArtists
+          ? (filter === "all" ? matchedArtists.slice(0, 8) : matchedArtists)
+          : [];
+        const displayPlaylists = showPlaylists
+          ? (filter === "all" ? matchedPlaylists.slice(0, 8) : matchedPlaylists)
+          : [];
+
+        const totalResults =
+          (showSongs ? matchedSongs.length : 0) +
+          (showVideos ? matchedVideos.length : 0) +
+          (showAlbums ? matchedAlbums.length : 0) +
+          (showArtists ? matchedArtists.length : 0) +
+          (showPlaylists ? matchedPlaylists.length : 0);
+
+        const filterOptions = [
+          { id: "all", label: "All" },
+          { id: "songs", label: "Songs" },
+          { id: "videos", label: "Videos" },
+          { id: "albums", label: "Albums" },
+          { id: "artists", label: "Artists" },
+          { id: "playlists", label: "Playlists" },
+          { id: "local", label: "Local Only" },
+          { id: "cloud", label: "Cloud Only" }
+        ];
+
+        container.innerHTML = `
+          <section>
+            <div class="search-header-card">
+              <div class="search-header-row">
+                <div style="min-width:0;">
+                  <h2 class="section-title">
+                    ${q ? `Results for "${this.escapeHtml(rawQuery)}"` : "Browse Full Library"}
+                  </h2>
+                  <p style="color:var(--text-secondary);font-size:12.5px;margin-top:4px;">
+                    ${totalResults} result${totalResults === 1 ? "" : "s"} ${q ? "matched" : "available"}
+                  </p>
+                </div>
+                <div class="search-sort-wrap">
+                  <label style="font-size:12px;color:var(--text-secondary);">Sort by:</label>
+                  <select class="sort-select" onchange="app.setSortBy(this.value)">
+                    <option value="recent" ${sort === "recent" ? "selected" : ""}>Recently Added</option>
+                    <option value="alpha" ${sort === "alpha" ? "selected" : ""}>Title (A-Z)</option>
+                    <option value="artist" ${sort === "artist" ? "selected" : ""}>Artist</option>
+                    <option value="duration" ${sort === "duration" ? "selected" : ""}>Duration</option>
+                  </select>
+                </div>
+              </div>
+              <div class="filter-pills" style="margin-top:14px;">
+                ${filterOptions.map(f => `
+                  <button class="pill ${filter === f.id ? "active" : ""}" onclick="app.setSearchFilter('${f.id}')">${f.label}</button>
+                `).join("")}
+              </div>
+            </div>
+
+            ${totalResults === 0 ? `
+              <div class="empty-state">
+                <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                <h3>No matching ${q ? "results" : "media"}</h3>
+                <p>${q ? "Try a different keyword, or clear the filters to see everything." : "Import audio or video files to populate your library."}</p>
+                ${q ? `<button class="btn btn-secondary" onclick="app.clearSearch()">Clear Search</button>` : ""}
+              </div>
+            ` : `
+              ${showSongs && displaySongs.length > 0 ? `
+                <div class="search-section">
+                  <div class="section-header">
+                    <h3 class="section-title">Songs <span class="search-count-badge">${matchedSongs.length}</span></h3>
+                    ${filter === "all" && matchedSongs.length > displaySongs.length ? `<button class="btn btn-ghost" onclick="app.setSearchFilter('songs')">View all ${matchedSongs.length}</button>` : ""}
+                  </div>
+                  ${this.renderTrackTableHTML(displaySongs, null, rawQuery)}
+                </div>
+              ` : ""}
+
+              ${showVideos && displayVideos.length > 0 ? `
+                <div class="search-section">
+                  <div class="section-header">
+                    <h3 class="section-title">Videos <span class="search-count-badge">${matchedVideos.length}</span></h3>
+                    ${filter === "all" && matchedVideos.length > displayVideos.length ? `<button class="btn btn-ghost" onclick="app.setSearchFilter('videos')">View all ${matchedVideos.length}</button>` : ""}
+                  </div>
+                  <div class="card-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
+                    ${displayVideos.map(v => this.renderMediaCardHTML(v)).join("")}
+                  </div>
+                </div>
+              ` : ""}
+
+              ${showAlbums && displayAlbums.length > 0 ? `
+                <div class="search-section">
+                  <div class="section-header">
+                    <h3 class="section-title">Albums <span class="search-count-badge">${matchedAlbums.length}</span></h3>
+                    ${filter === "all" && matchedAlbums.length > displayAlbums.length ? `<button class="btn btn-ghost" onclick="app.setSearchFilter('albums')">View all</button>` : ""}
+                  </div>
+                  <div class="card-grid">
+                    ${displayAlbums.map(alb => {
+                      const art = alb.art || ArtworkGenerator.generate(alb.name, alb.artist);
+                      const safeKey = this.escapeAttr(alb.name);
+                      return `
+                        <div class="media-card" onclick="app.openAlbumDetail('${safeKey}')">
+                          <div class="card-art-wrap">
+                            <img src="${art}" alt="${this.escapeAttr(alb.name)}" loading="lazy" />
+                            <button class="card-play-fab" onclick="event.stopPropagation(); app.playAlbum('${safeKey}')" aria-label="Play Album">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                            </button>
+                          </div>
+                          <div class="card-title">${this.highlightMatch(alb.name, rawQuery)}</div>
+                          <div class="card-subtitle">${this.escapeHtml(alb.artist)} • ${alb.tracks.length} songs</div>
+                        </div>
+                      `;
+                    }).join("")}
+                  </div>
+                </div>
+              ` : ""}
+
+              ${showArtists && displayArtists.length > 0 ? `
+                <div class="search-section">
+                  <div class="section-header">
+                    <h3 class="section-title">Artists <span class="search-count-badge">${matchedArtists.length}</span></h3>
+                    ${filter === "all" && matchedArtists.length > displayArtists.length ? `<button class="btn btn-ghost" onclick="app.setSearchFilter('artists')">View all</button>` : ""}
+                  </div>
+                  <div class="card-grid">
+                    ${displayArtists.map(artObj => {
+                      const cover = artObj.art || ArtworkGenerator.generate(artObj.name, "Artist");
+                      const safeKey = this.escapeAttr(artObj.name);
+                      return `
+                        <div class="media-card" onclick="app.openArtistDetail('${safeKey}')">
+                          <div class="card-art-wrap" style="border-radius:50%;">
+                            <img src="${cover}" alt="${this.escapeAttr(artObj.name)}" loading="lazy" />
+                          </div>
+                          <div class="card-title" style="text-align:center;">${this.highlightMatch(artObj.name, rawQuery)}</div>
+                          <div class="card-subtitle" style="text-align:center;">${artObj.tracks.length} track(s)</div>
+                        </div>
+                      `;
+                    }).join("")}
+                  </div>
+                </div>
+              ` : ""}
+
+              ${showPlaylists && displayPlaylists.length > 0 ? `
+                <div class="search-section">
+                  <div class="section-header">
+                    <h3 class="section-title">Playlists <span class="search-count-badge">${matchedPlaylists.length}</span></h3>
+                    ${filter === "all" && matchedPlaylists.length > displayPlaylists.length ? `<button class="btn btn-ghost" onclick="app.setSearchFilter('playlists')">View all</button>` : ""}
+                  </div>
+                  <div class="card-grid">
+                    ${displayPlaylists.map(pl => this.renderPlaylistCardHTML(pl)).join("")}
+                  </div>
+                </div>
+              ` : ""}
+            `}
+          </section>
+        `;
+      },
+
+      /* ------------------------------------------------------------------------
          VIEW TEMPLATES
          ------------------------------------------------------------------------ */
       renderHomeView(container) {
@@ -3774,6 +4265,7 @@
         const songs = active.filter(m => m.type === "audio");
         const videos = active.filter(m => m.type === "video");
         const cloudItems = active.filter(m => m.storageSource === "cloud");
+        const favoriteCount = active.filter(m => m.favorite || m.isFavorite).length;
         const recentItems = this.state.recentIds
           .map(id => active.find(m => m.id === id))
           .filter(Boolean)
@@ -3833,7 +4325,7 @@
             <div class="stat-card" onclick="app.navigate('favorites')" style="cursor:pointer">
               <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
               <div class="stat-info">
-                <div class="stat-val">${this.state.mediaItems.filter(m => m.favorite).length}</div>
+                <div class="stat-val">${favoriteCount}</div>
                 <div class="stat-lbl">Favorites</div>
               </div>
             </div>
@@ -3872,75 +4364,6 @@
               </section>
             ` : ""}
           `}
-        `;
-      },
-
-      renderSearchView(container) {
-        const q = this.state.searchQuery.trim().toLowerCase();
-        const filter = this.state.searchFilter;
-        const sort = this.state.sortBy;
-
-        let matchedMedia = this.state.mediaItems.filter(m => {
-          if (filter === "songs" && m.type !== "audio") return false;
-          if (filter === "videos" && m.type !== "video") return false;
-          if (!q) return true;
-          return (
-            (m.title || "").toLowerCase().includes(q) ||
-            (m.artist || "").toLowerCase().includes(q) ||
-            (m.album || "").toLowerCase().includes(q) ||
-            (m.fileName || "").toLowerCase().includes(q)
-          );
-        });
-
-        matchedMedia = this.sortMediaList(matchedMedia, sort);
-
-        const matchedPlaylists = this.state.playlists.filter(p =>
-          !q || p.name.toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q)
-        );
-
-        container.innerHTML = `
-          <section>
-            <div class="section-header">
-              <div class="filter-pills">
-                ${["all", "songs", "videos", "playlists", "artists", "albums"].map(f => `
-                  <button class="pill ${filter === f ? 'active' : ''}" onclick="app.setSearchFilter('${f}')">
-                    ${f.charAt(0).toUpperCase() + f.slice(1)}
-                  </button>
-                `).join("")}
-              </div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <label style="font-size:12px;color:var(--text-secondary)">Sort by:</label>
-                <select class="sort-select" onchange="app.setSortBy(this.value)">
-                  <option value="recent" ${sort === 'recent' ? 'selected' : ''}>Recently Added</option>
-                  <option value="alpha" ${sort === 'alpha' ? 'selected' : ''}>Alphabetical (A-Z)</option>
-                  <option value="artist" ${sort === 'artist' ? 'selected' : ''}>Artist</option>
-                  <option value="duration" ${sort === 'duration' ? 'selected' : ''}>Duration</option>
-                </select>
-              </div>
-            </div>
-
-            ${(matchedMedia.length === 0 && matchedPlaylists.length === 0) ? `
-              <div class="empty-state">
-                <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
-                <h3>No matching results found</h3>
-                <p>Try searching for another song title, artist, album, filename, or video title.</p>
-              </div>
-            ` : `
-              ${(filter === "all" || filter === "playlists") && matchedPlaylists.length > 0 ? `
-                <div style="margin-bottom:24px;">
-                  <h3 class="section-title" style="margin-bottom:12px;">Matching Playlists</h3>
-                  <div class="card-grid">
-                    ${matchedPlaylists.map(pl => this.renderPlaylistCardHTML(pl)).join("")}
-                  </div>
-                </div>
-              ` : ""}
-
-              ${filter !== "playlists" ? `
-                <h3 class="section-title" style="margin-bottom:12px;">Results (${matchedMedia.length})</h3>
-                ${this.renderTrackTableHTML(matchedMedia)}
-              ` : ""}
-            `}
-          </section>
         `;
       },
 
@@ -4225,12 +4648,13 @@
 
       renderFavoritesView(container) {
         const favs = this.sortMediaList(this.state.mediaItems.filter(m => m.favorite || m.isFavorite), this.state.sortBy);
+        const favSongs = favs.filter(f => f.type === "audio");
         container.innerHTML = `
           <section>
             <div class="section-header">
               <h2 class="section-title">Favorites (${favs.length})</h2>
-              ${favs.length > 0 ? `
-                <button class="btn btn-primary" onclick="app.playTrackList(${JSON.stringify(favs.filter(f=>f.type==='audio').map(f=>f.id)).replace(/"/g, '&quot;')}, 0)">Play Favorites</button>
+              ${favSongs.length > 0 ? `
+                <button class="btn btn-primary" onclick="app.playTrackList(${JSON.stringify(favSongs.map(f=>f.id)).replace(/"/g, '&quot;')}, 0)">Play Favorites</button>
               ` : ""}
             </div>
             ${favs.length === 0 ? `
@@ -4287,7 +4711,7 @@
           <section>
             <div class="section-header">
               <div>
-                <h2 class="section-title">Storage Manager & Backup Recovery</h2>
+                <h2 class="section-title">Storage Manager &amp; Backup Recovery</h2>
                 <p style="color:var(--text-secondary);font-size:12.5px;">All media files are stored locally as raw binary Blobs inside your browser's IndexedDB.</p>
               </div>
             </div>
@@ -4321,7 +4745,7 @@
                 Note: Browser storage is private to your device, subject to disk quota limits, and can be cleared if you clear site data in browser settings. Export a library backup below for safekeeping.
               </p>
               <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
-                <button class="btn btn-primary" onclick="app.exportLibraryBackup(false)">Export Metadata & Playlists (.json)</button>
+                <button class="btn btn-primary" onclick="app.exportLibraryBackup(false)">Export Metadata &amp; Playlists (.json)</button>
                 <button class="btn btn-secondary" onclick="app.exportLibraryBackup(true)">Export Full Backup (with Media)</button>
                 <button class="btn btn-secondary" onclick="document.getElementById('backupRestoreInput').click()">Restore Library Backup (.json)</button>
                 ${missingItems.length > 0 ? `
@@ -4384,14 +4808,18 @@
         `;
       },
 
-      renderTrackTableHTML(items, playlistId = null) {
+      renderTrackTableHTML(items, playlistId = null, highlightQuery = "") {
+        const hl = (s) => (highlightQuery && highlightQuery.trim())
+          ? this.highlightMatch(s, highlightQuery)
+          : this.escapeHtml(s);
+
         return `
           <div class="track-table-wrap">
             <table class="track-table">
               <thead>
                 <tr>
                   <th class="track-num-cell">#</th>
-                  <th>Title & Source</th>
+                  <th>Title &amp; Source</th>
                   <th class="track-album-cell">Album / Format</th>
                   <th class="track-duration-cell">Duration</th>
                   <th class="track-actions-cell">Actions</th>
@@ -4403,6 +4831,7 @@
                   const art = this.getItemEffectiveArtwork(item);
                   const fallbackArt = ArtworkGenerator.generate(item.title, item.artist, item.type === "video");
                   const dblAction = `app.handleUnifiedItemClick('${item.id}', '${playlistId || ''}')`;
+                  const isFav = !!(item.favorite || item.isFavorite);
 
                   return `
                     <tr class="track-row ${isCurrent ? 'playing' : ''}"
@@ -4415,12 +4844,12 @@
                         <div class="track-primary-cell">
                           <img class="track-thumb" src="${art}" alt="" loading="lazy" onerror="this.onerror=null;this.src='${fallbackArt}'" />
                           <div class="track-meta-text">
-                            <span class="track-name" style="display:flex;align-items:center;gap:6px;">
-                              <span>${this.escapeHtml(item.title)}</span>
+                            <span class="track-name" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                              <span>${hl(item.title)}</span>
                               ${this.renderStorageBadgeHTML(item)}
                               ${item.missingBlob ? `<span style="color:var(--warning);font-size:11px;">[Missing Local File]</span>` : ""}
                             </span>
-                            <span class="track-artist-sub">${this.escapeHtml(item.type === "video" ? (item.storageSource === "cloud" ? "Supabase Video" : "Local Video") : item.artist)}</span>
+                            <span class="track-artist-sub">${hl(item.type === "video" ? (item.storageSource === "cloud" ? "Supabase Video" : "Local Video") : (item.artist || "Unknown Artist"))}</span>
                           </div>
                         </div>
                       </td>
@@ -4430,8 +4859,8 @@
                         <button class="icon-btn" onclick="${dblAction}" title="Play Now" aria-label="Play">
                           <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
                         </button>
-                        <button class="icon-btn fav-btn ${(item.favorite || item.isFavorite) ? 'active' : ''}" onclick="app.toggleFavorite('${item.id}')" title="${(item.favorite || item.isFavorite) ? 'Remove from Favorites' : 'Add to Favorites'}" aria-label="Favorite" aria-pressed="${(item.favorite || item.isFavorite) ? 'true' : 'false'}">
-                          <svg viewBox="0 0 24 24" fill="${(item.favorite || item.isFavorite) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                        <button class="icon-btn fav-btn ${isFav ? 'active' : ''}" onclick="app.toggleFavorite('${item.id}')" title="${isFav ? 'Remove from Favorites' : 'Add to Favorites'}" aria-label="Favorite" aria-pressed="${isFav ? 'true' : 'false'}">
+                          <svg viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                         </button>
                         ${item.type === "audio" ? `
                           <button class="icon-btn" onclick="app.addToQueue('${item.id}')" title="Add to Queue" aria-label="Add to Queue">
@@ -4451,8 +4880,21 @@
         `;
       },
 
+      highlightMatch(text, query) {
+        const safeText = String(text ?? "");
+        if (!query || !String(query).trim()) return this.escapeHtml(safeText);
+        const lowerText = safeText.toLowerCase();
+        const lowerQuery = String(query).trim().toLowerCase();
+        const idx = lowerText.indexOf(lowerQuery);
+        if (idx === -1) return this.escapeHtml(safeText);
+        const before = this.escapeHtml(safeText.slice(0, idx));
+        const match = this.escapeHtml(safeText.slice(idx, idx + lowerQuery.length));
+        const after = this.escapeHtml(safeText.slice(idx + lowerQuery.length));
+        return `${before}<mark class="search-mark">${match}</mark>${after}`;
+      },
+
       /* ------------------------------------------------------------------------
-         HYBRID UPLOAD DESTINATION & LOCAL/SUPABASE IMPORT ENGINE
+         HYBRID UPLOAD DESTINATION & IMPORT ENGINE
          ------------------------------------------------------------------------ */
       openImportModal(defaultDest = "local") {
         this.state.uploadDestination = defaultDest;
@@ -4498,7 +4940,7 @@
                 <span style="font-size:11px;font-weight:400;opacity:0.8;">Batch import music/video folder</span>
               </button>
             </div>
-            <div style="margin-top:8px;padding-top:12px;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+            <div style="margin-top:8px;padding-top:12px;border-top:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
               <button class="btn btn-ghost" style="color:var(--accent-cloud)" onclick="app.openCloudSettingsModal()">Configure Supabase Keys</button>
               <button class="btn btn-ghost" style="color:var(--accent-primary)" onclick="app.closeModal(); app.loadBuiltInStarterTracks()">Generate Sample Synth Tracks</button>
             </div>
@@ -4523,7 +4965,6 @@
         const files = Array.from(fileList || []);
         if (files.length === 0) return;
 
-        // Always ask user to confirm upload destination when files are chosen or dropped
         const dest = await this.askUploadDestinationConfirmation(files.length);
         if (!dest) return;
 
@@ -4564,7 +5005,6 @@
             continue;
           }
 
-          // 1. LOCAL SAVE (Independent)
           if (needLocal) {
             const dupLocal = this.state.mediaItems.find(
               m => !m.deletedOnCloud && (m.storageSource || "local") === "local" && m.fileName === file.name && m.size === file.size
@@ -4593,7 +5033,6 @@
             }
           }
 
-          // 2. SUPABASE STORAGE UPLOAD (Independent)
           if (needCloud && this.isCloudConfigured()) {
             try {
               statusText.textContent = `Uploading to Supabase (${i + 1}/${files.length}): ${file.name}`;
@@ -4807,7 +5246,6 @@
 
           for (const f of (files || [])) {
             if (!f.name || f.name === ".emptyFolderPlaceholder" || f.name === "asfy_manifest.json") continue;
-            // Skip sub-folder entries without metadata/id
             if (!f.id && !f.metadata) continue;
 
             const objectPath = folderPath ? `${folderPath}/${f.name}` : f.name;
@@ -4830,7 +5268,6 @@
             const size = Number((f.metadata && f.metadata.size) || mEntry.size || (existing && existing.size) || 0);
             const deliveryUrl = this.getSupabasePublicObjectUrl(objectPath);
 
-            // Resolve valid cover artwork string (prioritize local custom art -> manifest art -> procedural canvas art)
             let art = null;
             if (existing && typeof existing.artwork === "string" && existing.artwork.startsWith("data:image/")) {
               art = existing.artwork;
@@ -5001,7 +5438,7 @@
           el.muted = true;
 
           const cleanup = (res) => {
-            URL.revokeObjectURL(url);
+            try { URL.revokeObjectURL(url); } catch {}
             resolve(res);
           };
 
@@ -5159,7 +5596,6 @@
           return;
         }
 
-        // Pause video player if open
         const vidEl = document.getElementById("htmlVideoElement");
         if (vidEl && !vidEl.paused) vidEl.pause();
 
@@ -5189,7 +5625,6 @@
           this.audio.playbackRate = this.state.audioSpeed || 1.0;
           this.state.currentTrackId = track.id;
 
-          // Record in recently played
           this.state.recentIds = [track.id, ...this.state.recentIds.filter(id => id !== track.id)].slice(0, 30);
           this.savePreferences();
 
@@ -5308,7 +5743,7 @@
       toggleMute() {
         this.state.muted = !this.state.muted;
         this.audio.muted = this.state.muted;
-        document.getElementById("btnMute").classList.toggle("active", this.state.muted);
+        document.getElementById("btnMute")?.classList.toggle("active", this.state.muted);
       },
 
       addToQueue(trackId) {
@@ -5420,18 +5855,26 @@
         const barArtEl = document.getElementById("playerBarArt");
         const expArtEl = document.getElementById("expandedArtImg");
 
-        barArtEl.onerror = () => { barArtEl.onerror = null; barArtEl.src = fallbackArt; };
-        expArtEl.onerror = () => { expArtEl.onerror = null; expArtEl.src = fallbackArt; };
+        if (barArtEl) {
+          barArtEl.onerror = () => { barArtEl.onerror = null; barArtEl.src = fallbackArt; };
+          barArtEl.src = art;
+        }
+        if (expArtEl) {
+          expArtEl.onerror = () => { expArtEl.onerror = null; expArtEl.src = fallbackArt; };
+          expArtEl.src = art;
+        }
 
-        barArtEl.src = art;
-        document.getElementById("playerBarTitle").textContent = track.title;
-        document.getElementById("playerBarArtist").textContent = `${track.artist} • ${track.album || "Single"}`;
+        const title = document.getElementById("playerBarTitle");
+        const artist = document.getElementById("playerBarArtist");
+        const expTitle = document.getElementById("expandedTitle");
+        const expArtist = document.getElementById("expandedArtist");
+        const expAlbum = document.getElementById("expandedAlbumLabel");
 
-        // Expanded player sync
-        expArtEl.src = art;
-        document.getElementById("expandedTitle").textContent = track.title;
-        document.getElementById("expandedArtist").textContent = track.artist;
-        document.getElementById("expandedAlbumLabel").textContent = track.album || "Local Library";
+        if (title) title.textContent = track.title;
+        if (artist) artist.textContent = `${track.artist} • ${track.album || "Single"}`;
+        if (expTitle) expTitle.textContent = track.title;
+        if (expArtist) expArtist.textContent = track.artist;
+        if (expAlbum) expAlbum.textContent = track.album || "Local Library";
 
         this.syncCurrentTrackFavoriteButtons(track);
 
@@ -5487,7 +5930,6 @@
         try {
           const dataUrl = await this.resizeAndConvertImageToDataURL(file, 600, 600);
 
-          // Check if we are currently inside the Edit Metadata Modal
           const previewEl = document.getElementById("metaArtworkPreviewImg");
           if (previewEl && document.getElementById("modalBackdrop").classList.contains("open")) {
             this.state.pendingEditArtworkDataUrl = dataUrl;
@@ -5497,7 +5939,6 @@
             return;
           }
 
-          // Otherwise apply directly to the target track
           const targetId = this.state.artworkTargetId || this.state.currentTrackId;
           const item = this.state.mediaItems.find(m => m.id === targetId);
           if (!item) return;
@@ -5582,8 +6023,10 @@
 
       resetPlayerBarUI() {
         const defaultArt = ArtworkGenerator.generate("ASfy", "Ready");
-        document.getElementById("playerBarArt").src = defaultArt;
-        document.getElementById("expandedArtImg").src = defaultArt;
+        const barArt = document.getElementById("playerBarArt");
+        const expArt = document.getElementById("expandedArtImg");
+        if (barArt) barArt.src = defaultArt;
+        if (expArt) expArt.src = defaultArt;
         this.syncCurrentTrackFavoriteButtons(null);
       },
 
@@ -5591,9 +6034,11 @@
         const pauseSvg = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`;
         const playSvg = `<polygon points="6 4 20 12 6 20 6 4"/>`;
         const iconHtml = this.state.isPlaying ? pauseSvg : playSvg;
-        document.getElementById("iconPlayMain").innerHTML = iconHtml;
-        document.getElementById("iconPlayExpanded").innerHTML = iconHtml;
+        const mainIcon = document.getElementById("iconPlayMain");
+        const expIcon = document.getElementById("iconPlayExpanded");
         const mobileMiniIcon = document.getElementById("iconPlayMobileMini");
+        if (mainIcon) mainIcon.innerHTML = iconHtml;
+        if (expIcon) expIcon.innerHTML = iconHtml;
         if (mobileMiniIcon) mobileMiniIcon.innerHTML = iconHtml;
       },
 
@@ -5609,7 +6054,6 @@
         };
         const repeatTitle = repeatLabels[this.state.repeat] || "Repeat Mode";
 
-        // Desktop player bar repeat button
         const btnRepeat = document.getElementById("btnRepeat");
         const badgeDesktop = document.getElementById("repeatOneBadge");
         if (btnRepeat) {
@@ -5621,7 +6065,6 @@
           badgeDesktop.style.display = this.state.repeat === "one" ? "block" : "none";
         }
 
-        // Expanded (maximised) player repeat button — NEW
         const btnRepeatExpanded = document.getElementById("btnRepeatExpanded");
         const badgeExpanded = document.getElementById("repeatOneBadgeExpanded");
         if (btnRepeatExpanded) {
@@ -5656,16 +6099,12 @@
         panel.classList.toggle("open");
         if (panel.classList.contains("open")) {
           this.renderQueueDrawer();
-          // Make sure the maximised repeat button reflects current state immediately
           this.syncTransportButtonsUI();
         }
       },
 
       /* ------------------------------------------------------------------------
-         EXPANDED PLAYER COVER-ART SEEK GESTURES (Double-tap / Double-click)
-         Left half  = rewind 5 seconds
-         Right half = forward 5 seconds
-         Works for both mouse (dblclick) and touch (manual double-tap detection).
+         EXPANDED PLAYER COVER-ART SEEK GESTURES
          ------------------------------------------------------------------------ */
       bindArtworkSeekGestures() {
         const artContainer = document.getElementById("expandedArtContainer");
@@ -5675,14 +6114,12 @@
         let lastTapTime = 0;
         let lastTapX = 0;
 
-        // Desktop / mouse: native double click
         artContainer.addEventListener("dblclick", (e) => {
-          if (e.target.closest("button")) return; // never hijack the overlay buttons
+          if (e.target.closest("button")) return;
           e.preventDefault();
           this.seekRelativeFromArtwork(e.clientX, artContainer);
         });
 
-        // Mobile / touch: manual double-tap detection (dblclick is unreliable on touch)
         artContainer.addEventListener("touchend", (e) => {
           if (e.target.closest("button")) return;
           const touch = (e.changedTouches && e.changedTouches[0]) || null;
@@ -5700,7 +6137,6 @@
       },
 
       seekRelativeFromArtwork(clientX, containerEl) {
-        // Guard against dblclick + double-tap both firing on hybrid devices
         const now = Date.now();
         if (now - (this._lastArtSeekAt || 0) < 400) return;
         this._lastArtSeekAt = now;
@@ -5732,7 +6168,7 @@
 
         const el = side === "left" ? leftEl : rightEl;
         if (!el) return;
-        void el.offsetWidth; // force reflow so repeated taps re-animate
+        void el.offsetWidth;
         el.classList.add("show");
         clearTimeout(this._artFlashTimer);
         this._artFlashTimer = setTimeout(() => el.classList.remove("show"), 560);
@@ -5742,12 +6178,13 @@
         const modes = ["bars", "wave", "radial", "off"];
         const next = modes[(modes.indexOf(VisualizerEngine.mode) + 1) % modes.length];
         VisualizerEngine.mode = next;
-        document.getElementById("vizModeLabel").textContent = next.charAt(0).toUpperCase() + next.slice(1);
+        const vizLabel = document.getElementById("vizModeLabel");
+        if (vizLabel) vizLabel.textContent = next.charAt(0).toUpperCase() + next.slice(1);
         this.savePreferences();
       },
 
       /* ------------------------------------------------------------------------
-         DEDICATED VIDEO PLAYER ENGINE (with Repeat Off / One / All & Prev/Next)
+         DEDICATED VIDEO PLAYER ENGINE
          ------------------------------------------------------------------------ */
       getVideoItems() {
         return this.getActiveMediaItems().filter(m => m.type === "video");
@@ -5757,7 +6194,6 @@
         const videoItem = this.state.mediaItems.find(m => m.id === videoId && m.type === "video");
         if (!videoItem) return;
 
-        // Pause audio engine so audio & video never clash
         if (!this.audio.paused) {
           this.audio.pause();
           this.state.isPlaying = false;
@@ -5790,10 +6226,11 @@
 
           const vidEl = document.getElementById("htmlVideoElement");
           vidEl.crossOrigin = "anonymous";
-          vidEl.innerHTML = ""; // clear old subtitle tracks
+          vidEl.innerHTML = "";
           vidEl.src = videoSrc;
           vidEl.loop = (this.state.videoRepeat === "one");
-          vidEl.playbackRate = parseFloat(document.getElementById("vidSpeedSelect").value || "1");
+          const speedEl = document.getElementById("vidSpeedSelect");
+          vidEl.playbackRate = parseFloat(speedEl ? speedEl.value : "1");
 
           const srcTag = videoItem.storageSource === "cloud" ? "SUPABASE STREAM" : "LOCAL VIDEO";
           document.getElementById("videoPlayerTitle").textContent = videoItem.title;
@@ -5883,14 +6320,17 @@
 
       closeVideoPlayer() {
         const vidEl = document.getElementById("htmlVideoElement");
-        vidEl.pause();
-        vidEl.removeAttribute("src");
-        vidEl.load();
+        if (vidEl) {
+          vidEl.pause();
+          vidEl.removeAttribute("src");
+          vidEl.load();
+        }
         document.getElementById("videoPlayerOverlay").classList.remove("open");
       },
 
       toggleVideoPlayPause() {
         const vidEl = document.getElementById("htmlVideoElement");
+        if (!vidEl) return;
         if (vidEl.paused) vidEl.play().catch(() => {});
         else vidEl.pause();
         this.syncVideoPlayIcon();
@@ -5898,23 +6338,26 @@
 
       syncVideoPlayIcon() {
         const vidEl = document.getElementById("htmlVideoElement");
+        if (!vidEl) return;
         const pauseSvg = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`;
         const playSvg = `<polygon points="6 4 20 12 6 20 6 4"/>`;
-        document.getElementById("iconVideoPlay").innerHTML = !vidEl.paused ? pauseSvg : playSvg;
+        const icon = document.getElementById("iconVideoPlay");
+        if (icon) icon.innerHTML = !vidEl.paused ? pauseSvg : playSvg;
       },
 
       toggleVideoMute() {
         const vidEl = document.getElementById("htmlVideoElement");
-        vidEl.muted = !vidEl.muted;
+        if (vidEl) vidEl.muted = !vidEl.muted;
       },
 
       setVideoSpeed(val) {
         const vidEl = document.getElementById("htmlVideoElement");
-        vidEl.playbackRate = parseFloat(val);
+        if (vidEl) vidEl.playbackRate = parseFloat(val);
       },
 
       async toggleVideoPiP() {
         const vidEl = document.getElementById("htmlVideoElement");
+        if (!vidEl) return;
         try {
           if (document.pictureInPictureElement) {
             await document.exitPictureInPicture();
@@ -5930,6 +6373,7 @@
 
       toggleVideoFullscreen() {
         const container = document.getElementById("videoFrameContainer");
+        if (!container) return;
         if (!document.fullscreenElement) {
           container.requestFullscreen?.().catch(() => {});
         } else {
@@ -5940,7 +6384,6 @@
       async handleSubtitleUpload(file) {
         if (!file) return;
         let text = await file.text();
-        // Convert SRT to WebVTT automatically if needed
         if (file.name.toLowerCase().endsWith(".srt") || !text.startsWith("WEBVTT")) {
           text = "WEBVTT\n\n" + text.replace(/(\d{2}:\d{2}:\d{2}),(\d{3})/g, "$1.$2");
         }
@@ -6158,12 +6601,12 @@
                 ${songs.map(s => {
                   const inPl = pl.trackIds.includes(s.id);
                   return `
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg-elevated);border-radius:var(--radius-sm);">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg-elevated);border-radius:var(--radius-sm);gap:8px;">
                       <div style="min-width:0;">
-                        <div style="font-weight:600;">${this.escapeHtml(s.title)}</div>
-                        <div style="font-size:12px;color:var(--text-secondary)">${this.escapeHtml(s.artist)}</div>
+                        <div style="font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this.escapeHtml(s.title)}</div>
+                        <div style="font-size:12px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${this.escapeHtml(s.artist)}</div>
                       </div>
-                      <button class="btn ${inPl ? 'btn-secondary' : 'btn-primary'}" style="padding:5px 12px;font-size:12px;"
+                      <button class="btn ${inPl ? 'btn-secondary' : 'btn-primary'}" style="padding:5px 12px;font-size:12px;flex-shrink:0;"
                               onclick="app.toggleTrackInPlaylist('${pl.id}', '${s.id}'); app.openAddTracksToPlaylistModal('${pl.id}')">
                         ${inPl ? 'Remove' : '+ Add'}
                       </button>
@@ -6215,7 +6658,7 @@
             <p style="font-size:12.5px;color:var(--text-secondary)">${this.escapeHtml(item.artist)} • ${this.escapeHtml(item.fileName)}</p>
             <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
               <button class="btn btn-secondary" style="justify-content:flex-start;" onclick="app.closeModal(); app.toggleFavorite('${item.id}')">${isFav ? '♥ Remove from Favorites' : '♡ Add to Favorites'}</button>
-              <button class="btn btn-secondary" style="justify-content:flex-start;" onclick="app.closeModal(); app.openEditMetadataModal('${item.id}')">Edit Metadata & Custom Cover Artwork</button>
+              <button class="btn btn-secondary" style="justify-content:flex-start;" onclick="app.closeModal(); app.openEditMetadataModal('${item.id}')">Edit Metadata &amp; Custom Cover Artwork</button>
               <button class="btn btn-secondary" style="justify-content:flex-start;" onclick="app.closeModal(); app.triggerCustomArtworkUpload('${item.id}')">Upload Custom Playing Image / Cover Art</button>
               ${item.hasCustomArtwork ? `
                 <button class="btn btn-secondary" style="justify-content:flex-start;" onclick="app.closeModal(); app.resetTrackArtworkToDefault('${item.id}')">Reset Cover Art to Default</button>
@@ -6225,8 +6668,8 @@
               ` : ""}
               ${contextPlaylistId ? `
                 <div style="display:flex;gap:8px;">
-                  <button class="btn btn-secondary" style="flex:1" onclick="app.movePlaylistTrack('${contextPlaylistId}', '${item.id}', -1)">Move Up in Playlist</button>
-                  <button class="btn btn-secondary" style="flex:1" onclick="app.movePlaylistTrack('${contextPlaylistId}', '${item.id}', 1)">Move Down in Playlist</button>
+                  <button class="btn btn-secondary" style="flex:1" onclick="app.movePlaylistTrack('${contextPlaylistId}', '${item.id}', -1)">Move Up</button>
+                  <button class="btn btn-secondary" style="flex:1" onclick="app.movePlaylistTrack('${contextPlaylistId}', '${item.id}', 1)">Move Down</button>
                 </div>
                 <button class="btn btn-danger" style="justify-content:flex-start;" onclick="app.closeModal(); app.toggleTrackInPlaylist('${contextPlaylistId}', '${item.id}')">Remove from this Playlist</button>
               ` : ""}
@@ -6256,11 +6699,11 @@
         const currentArt = this.getItemEffectiveArtwork(item);
 
         this.showModal(
-          "Edit Media Metadata & Cover Artwork",
+          "Edit Media Metadata &amp; Cover Artwork",
           `
-            <div style="display:flex;align-items:center;gap:16px;padding:12px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);">
+            <div style="display:flex;align-items:center;gap:16px;padding:12px;background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-md);flex-wrap:wrap;">
               <img id="metaArtworkPreviewImg" src="${currentArt}" alt="Artwork Preview" style="width:84px;height:84px;border-radius:var(--radius-sm);object-fit:cover;flex-shrink:0;border:1px solid var(--border-subtle);" />
-              <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:0;">
+              <div style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px;">
                 <span id="metaArtworkStatusBadge" style="font-size:11.5px;color:var(--accent-primary);font-weight:600;">
                   ${item.hasCustomArtwork ? "Custom Cover Image Active" : "Default Cover Artwork Active"}
                 </span>
@@ -6298,7 +6741,7 @@
       previewResetArtworkInModal(itemId) {
         const item = this.state.mediaItems.find(m => m.id === itemId);
         if (!item) return;
-        this.state.pendingEditArtworkDataUrl = null; // null signals reset to default
+        this.state.pendingEditArtworkDataUrl = null;
         const fallback = item.defaultArtworkDataUrl || ArtworkGenerator.generate(item.title, item.artist, item.type === "video");
         const previewEl = document.getElementById("metaArtworkPreviewImg");
         if (previewEl) previewEl.src = fallback;
@@ -6318,7 +6761,6 @@
             item.defaultArtworkDataUrl = item.artwork || null;
           }
           if (this.state.pendingEditArtworkDataUrl === null) {
-            // Reset to default embedded or procedural artwork
             item.artwork = item.defaultArtworkDataUrl || null;
             item.hasCustomArtwork = false;
           } else {
@@ -6338,7 +6780,7 @@
         }
         this.closeModal();
         this.renderView();
-        this.showToast("Metadata & artwork saved.");
+        this.showToast("Metadata &amp; artwork saved.");
       },
 
       confirmDeleteMedia(itemId) {
@@ -6359,7 +6801,6 @@
         const item = this.state.mediaItems.find(m => m.id === itemId);
         if (!item) return;
 
-        // Stop playback if the deleted track is currently playing
         if (this.state.currentTrackId === itemId) {
           this.audio.pause();
           this.audio.removeAttribute("src");
@@ -6387,7 +6828,6 @@
           this.state.mediaItems = this.state.mediaItems.filter(m => m.id !== itemId);
         }
 
-        // Remove from active queue and playlists
         this.state.queue = this.state.queue.filter(id => id !== itemId);
         for (const pl of this.state.playlists) {
           if (pl.trackIds.includes(itemId)) {
@@ -6401,7 +6841,7 @@
         this.renderView();
         this.showToast(
           item.storageSource === "cloud"
-            ? "Deleted track from Supabase Storage & manifest (Local files untouched)."
+            ? "Deleted track from Supabase Storage &amp; manifest (Local files untouched)."
             : "Local file removed from IndexedDB (Supabase files untouched)."
         );
       },
@@ -6466,7 +6906,6 @@
           };
 
           if (includeMediaBlobs) {
-            // Safeguard against massive in-memory crash (>65MB warning)
             const totalBytes = this.state.mediaItems.reduce((a, b) => a + (b.size || 0), 0);
             if (totalBytes > 65 * 1024 * 1024) {
               this.showToast("Library exceeds 65MB safe single-JSON memory limit; exporting metadata + relink manifest.", true);
@@ -6524,7 +6963,7 @@
             `
               <p style="color:var(--text-secondary)">Backup Summary (${this.escapeHtml(data.exportedAt || "Unknown Date")}):</p>
               <ul style="margin-left:18px;color:var(--text-primary);font-size:13px;">
-                <li>Backup Mode: <strong>${isFull ? "Full Media + Metadata" : "Metadata & Playlists Only"}</strong></li>
+                <li>Backup Mode: <strong>${isFull ? "Full Media + Metadata" : "Metadata &amp; Playlists Only"}</strong></li>
                 <li>Media Tracks: <strong>${data.mediaItems.length}</strong></li>
                 <li>Playlists: <strong>${(data.playlists || []).length}</strong></li>
               </ul>
@@ -6606,8 +7045,11 @@
 
       clearSearch() {
         this.state.searchQuery = "";
-        document.getElementById("globalSearchInput").value = "";
-        document.getElementById("searchClearBtn").style.display = "none";
+        const input = document.getElementById("globalSearchInput");
+        if (input) input.value = "";
+        const clearBtn = document.getElementById("searchClearBtn");
+        if (clearBtn) clearBtn.style.display = "none";
+        clearTimeout(this._searchDebounceTimer);
         this.renderView();
       },
 
@@ -6651,7 +7093,7 @@ self.addEventListener('fetch', e => {
 });`;
 
         this.showModal(
-          "ASfy Documentation, PWA Setup & Acceptance Report",
+          "ASfy Documentation, PWA Setup &amp; Acceptance Report",
           `
             <p style="color:var(--text-secondary);font-size:13px;">
               ASfy runs out-of-the-box by opening <code>index.html</code> directly in any modern browser. For optional Progressive Web App (PWA) installation and Service Worker offline shell caching, serve the folder over <code>localhost</code> or HTTPS (as browsers restrict Service Workers on <code>file://</code> URLs).
@@ -6675,9 +7117,9 @@ Escape         : Close modals, expanded player, or video player</div>
             <h4>Touch / Mouse Gestures (Expanded Player)</h4>
             <div class="code-snippet">Double-tap / double-click LEFT half of cover art  : Rewind 5 seconds
 Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
-            <h4>Browser Limitations & Privacy</h4>
+            <h4>Browser Limitations &amp; Privacy</h4>
             <ul style="margin-left:18px;font-size:12.5px;color:var(--text-secondary);">
-              <li>Zero external requests, zero cloud uploads, and zero tracking.</li>
+              <li>Zero external requests (except your own Supabase bucket), zero tracking.</li>
               <li>Audio/Video format decoding depends on browser codec support (MP3, WAV, OGG, M4A, FLAC, MP4, WebM).</li>
               <li>IndexedDB storage quota depends on available free disk space on your device.</li>
             </ul>
@@ -6710,18 +7152,22 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
           const dur = isFinite(this.audio.duration) ? this.audio.duration : 0;
           const permille = dur > 0 ? Math.round((cur / dur) * 1000) : 0;
 
-          seekSlider.value = permille;
-          expSeekSlider.value = permille;
+          if (seekSlider) seekSlider.value = permille;
+          if (expSeekSlider) expSeekSlider.value = permille;
           if (miniFill) {
             miniFill.style.width = `${(permille / 10).toFixed(1)}%`;
           }
 
           const curStr = this.formatTime(cur);
           const durStr = this.formatTime(dur);
-          document.getElementById("timeCurrent").textContent = curStr;
-          document.getElementById("timeDuration").textContent = durStr;
-          document.getElementById("expTimeCurrent").textContent = curStr;
-          document.getElementById("expTimeDuration").textContent = durStr;
+          const tc = document.getElementById("timeCurrent");
+          const td = document.getElementById("timeDuration");
+          const etc = document.getElementById("expTimeCurrent");
+          const etd = document.getElementById("expTimeDuration");
+          if (tc) tc.textContent = curStr;
+          if (td) td.textContent = durStr;
+          if (etc) etc.textContent = curStr;
+          if (etd) etd.textContent = durStr;
         });
 
         this.audio.addEventListener("ended", () => {
@@ -6740,10 +7186,10 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
             this.audio.currentTime = (val / 1000) * this.audio.duration;
           }
         };
-        seekSlider.addEventListener("input", (e) => onSeek(e.target.value));
-        expSeekSlider.addEventListener("input", (e) => onSeek(e.target.value));
+        seekSlider?.addEventListener("input", (e) => onSeek(e.target.value));
+        expSeekSlider?.addEventListener("input", (e) => onSeek(e.target.value));
 
-        document.getElementById("volumeSlider").addEventListener("input", (e) => {
+        document.getElementById("volumeSlider")?.addEventListener("input", (e) => {
           const v = parseFloat(e.target.value);
           this.state.volume = v;
           this.audio.volume = v;
@@ -6755,13 +7201,16 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
       bindVideoEvents() {
         const vidEl = document.getElementById("htmlVideoElement");
         const vidSeek = document.getElementById("vidSeekSlider");
+        if (!vidEl || !vidSeek) return;
 
         vidEl.addEventListener("timeupdate", () => {
           const cur = vidEl.currentTime || 0;
           const dur = isFinite(vidEl.duration) ? vidEl.duration : 0;
           vidSeek.value = dur > 0 ? Math.round((cur / dur) * 1000) : 0;
-          document.getElementById("vidTimeCurrent").textContent = this.formatTime(cur);
-          document.getElementById("vidTimeDuration").textContent = this.formatTime(dur);
+          const vtc = document.getElementById("vidTimeCurrent");
+          const vtd = document.getElementById("vidTimeDuration");
+          if (vtc) vtc.textContent = this.formatTime(cur);
+          if (vtd) vtd.textContent = this.formatTime(dur);
         });
 
         vidEl.addEventListener("play", () => this.syncVideoPlayIcon());
@@ -6783,48 +7232,69 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
           }
         });
 
-        document.getElementById("vidVolumeSlider").addEventListener("input", (e) => {
+        document.getElementById("vidVolumeSlider")?.addEventListener("input", (e) => {
           vidEl.volume = parseFloat(e.target.value);
         });
       },
 
       bindUIEvents() {
-        document.getElementById("fileInputFiles").addEventListener("change", (e) => {
+        document.getElementById("fileInputFiles")?.addEventListener("change", (e) => {
           this.handleFilesSelected(e.target.files);
           e.target.value = "";
         });
-        document.getElementById("fileInputFolder").addEventListener("change", (e) => {
+        document.getElementById("fileInputFolder")?.addEventListener("change", (e) => {
           this.handleFilesSelected(e.target.files);
           e.target.value = "";
         });
-        document.getElementById("subtitleInput").addEventListener("change", (e) => {
+        document.getElementById("subtitleInput")?.addEventListener("change", (e) => {
           if (e.target.files[0]) this.handleSubtitleUpload(e.target.files[0]);
           e.target.value = "";
         });
-        document.getElementById("backupRestoreInput").addEventListener("change", (e) => {
+        document.getElementById("backupRestoreInput")?.addEventListener("change", (e) => {
           if (e.target.files[0]) this.handleBackupFileSelected(e.target.files[0]);
           e.target.value = "";
         });
-        document.getElementById("relinkMediaInput").addEventListener("change", (e) => {
+        document.getElementById("relinkMediaInput")?.addEventListener("change", (e) => {
           this.handleRelinkFiles(e.target.files);
           e.target.value = "";
         });
-        document.getElementById("customArtworkInput").addEventListener("change", (e) => {
+        document.getElementById("customArtworkInput")?.addEventListener("change", (e) => {
           if (e.target.files[0]) this.handleCustomArtworkSelected(e.target.files[0]);
           e.target.value = "";
         });
 
-        // Search input live updates
+        // Search input with debounced live update — FIXED so it works reliably
         const searchInput = document.getElementById("globalSearchInput");
-        searchInput.addEventListener("input", (e) => {
-          this.state.searchQuery = e.target.value;
-          document.getElementById("searchClearBtn").style.display = e.target.value ? "inline-flex" : "none";
-          if (this.state.currentView !== "search") {
-            this.navigate("search");
-          } else {
-            this.renderView();
-          }
-        });
+        if (searchInput) {
+          searchInput.addEventListener("input", (e) => {
+            this.state.searchQuery = e.target.value;
+            const clearBtn = document.getElementById("searchClearBtn");
+            if (clearBtn) clearBtn.style.display = e.target.value ? "inline-flex" : "none";
+
+            clearTimeout(this._searchDebounceTimer);
+            this._searchDebounceTimer = setTimeout(() => {
+              if (this.state.currentView !== "search") {
+                this.navigate("search");
+              } else {
+                this.renderView();
+              }
+            }, 100);
+          });
+
+          // Enter key: jump to search view immediately
+          searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              clearTimeout(this._searchDebounceTimer);
+              if (this.state.currentView !== "search") {
+                this.navigate("search");
+              } else {
+                this.renderView();
+              }
+              searchInput.blur();
+            }
+          });
+        }
 
         // Full-window Drag and Drop
         const dropOverlay = document.getElementById("dropzoneOverlay");
@@ -6853,6 +7323,11 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
           }
         });
 
+        // Click on modal backdrop closes it
+        document.getElementById("modalBackdrop")?.addEventListener("click", (e) => {
+          if (e.target.id === "modalBackdrop") this.closeModal();
+        });
+
         // Cover-art double-tap / double-click seek gestures (expanded player)
         this.bindArtworkSeekGestures();
       },
@@ -6875,6 +7350,7 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
             e.preventDefault();
             document.getElementById("globalSearchInput").focus();
+            document.getElementById("globalSearchInput").select();
             return;
           }
 
@@ -6925,6 +7401,7 @@ Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
 
       showToast(msg, isError = false) {
         const container = document.getElementById("toastContainer");
+        if (!container) return;
         const toast = document.createElement("div");
         toast.className = `toast ${isError ? "error" : ""}`;
         toast.textContent = msg;
