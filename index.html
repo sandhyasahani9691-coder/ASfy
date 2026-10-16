@@ -1346,12 +1346,83 @@
       box-shadow: var(--shadow-lg);
       border: 1px solid rgba(255, 255, 255, 0.14);
       flex-shrink: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     .expanded-art-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      pointer-events: none;
+    }
+
+    /* Double-tap / double-click seek feedback overlay */
+    .art-seek-flash {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) scale(0.85);
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: rgba(9, 10, 12, 0.78);
+      border: 1.5px solid rgba(181, 255, 43, 0.55);
+      color: var(--accent-primary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+      z-index: 6;
+    }
+
+    .art-seek-flash.left {
+      left: 10px;
+    }
+
+    .art-seek-flash.right {
+      right: 10px;
+    }
+
+    .art-seek-flash.show {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    .art-seek-flash svg {
+      width: 18px;
+      height: 18px;
+      margin-bottom: 1px;
+    }
+
+    .expanded-art-seek-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: -8px;
+      user-select: none;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .expanded-art-seek-hint kbd {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xs);
+      padding: 1px 6px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-secondary);
     }
 
     .player-art-cam-btn {
@@ -1393,6 +1464,7 @@
       gap: 8px;
       opacity: 0;
       transition: opacity var(--transition-fast);
+      z-index: 7;
     }
 
     .expanded-art-container:hover .expanded-art-overlay-actions {
@@ -1907,6 +1979,12 @@
         left: 12px;
         right: 12px;
       }
+
+      /* Show the double-tap hint prominently on touch devices */
+      .expanded-art-seek-hint {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
     }
 
     @media (max-width: 640px) {
@@ -1985,6 +2063,13 @@
 
       .video-controls-bar {
         padding: 10px 12px;
+      }
+
+      /* Slightly larger seek flash for thumb-friendly feedback */
+      .art-seek-flash {
+        width: 74px;
+        height: 74px;
+        font-size: 12px;
       }
     }
   </style>
@@ -2348,18 +2433,37 @@
 
     <div id="expandedBodyContainer" class="expanded-body" data-mobile-tab="stage">
       <div class="expanded-stage">
-        <div class="expanded-art-container">
+        <div class="expanded-art-container" id="expandedArtContainer" title="Double-tap / double-click the cover: left side = rewind 5s, right side = forward 5s" aria-label="Cover art. Double-tap left to rewind 5 seconds, right to forward 5 seconds.">
           <img id="expandedArtImg" src="" alt="Expanded Cover Artwork" />
+
+          <!-- Double-tap / double-click seek feedback overlays -->
+          <div id="artSeekFlashLeft" class="art-seek-flash left" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>
+            <span>5s</span>
+          </div>
+          <div id="artSeekFlashRight" class="art-seek-flash right" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+            <span>5s</span>
+          </div>
+
           <div class="expanded-art-overlay-actions">
-            <button class="btn btn-primary" style="padding:6px 12px;font-size:12px;" onclick="app.triggerCustomArtworkForCurrentTrack()">
+            <button class="btn btn-primary" style="padding:6px 12px;font-size:12px;" onclick="event.stopPropagation(); app.triggerCustomArtworkForCurrentTrack()">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
               <span>Change Cover Art</span>
             </button>
-            <button id="expandedResetArtBtn" class="btn btn-secondary" style="padding:6px 12px;font-size:12px;display:none;" onclick="app.resetCurrentTrackArtwork()">
+            <button id="expandedResetArtBtn" class="btn btn-secondary" style="padding:6px 12px;font-size:12px;display:none;" onclick="event.stopPropagation(); app.resetCurrentTrackArtwork()">
               <span>Reset Default</span>
             </button>
           </div>
         </div>
+
+        <div class="expanded-art-seek-hint">
+          <span>Double-tap / double-click cover art:</span>
+          <span><kbd>left</kbd> −5s</span>
+          <span>•</span>
+          <span><kbd>right</kbd> +5s</span>
+        </div>
+
         <div style="display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:-8px;">
           <button class="btn btn-ghost" style="font-size:12px;color:var(--accent-primary);" onclick="app.triggerCustomArtworkForCurrentTrack()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -2387,6 +2491,10 @@
           <button class="icon-btn" onclick="app.prevTrack()" title="Previous"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"/></svg></button>
           <button class="play-main-btn" style="width:52px;height:52px;" onclick="app.togglePlayPause()" title="Play/Pause"><svg id="iconPlayExpanded" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg></button>
           <button class="icon-btn" onclick="app.nextTrack()" title="Next"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5"/></svg></button>
+          <button id="btnRepeatExpanded" class="icon-btn" onclick="app.cycleRepeat()" aria-label="Repeat Mode" title="Repeat Mode">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+            <span id="repeatOneBadgeExpanded" style="display:none;position:absolute;font-size:9px;font-weight:800;top:4px;right:4px;color:var(--accent-primary)">1</span>
+          </button>
           <button id="btn-expanded-fav" class="icon-btn fav-btn" onclick="app.toggleCurrentFavorite()" aria-label="Favorite current track" aria-pressed="false" title="Add to Favorites"><svg id="iconExpandedFav" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
         </div>
       </div>
@@ -3034,6 +3142,10 @@
       audio: new Audio(),
       activeObjectUrl: null,
       activeVideoUrl: null,
+
+      // Throttle guard so dblclick + double-tap never double-fire a seek
+      _lastArtSeekAt: 0,
+      _artFlashTimer: null,
 
       async init() {
         this.audio.crossOrigin = "anonymous";
@@ -5185,7 +5297,12 @@
         this.state.repeat = order[(order.indexOf(this.state.repeat) + 1) % order.length];
         this.syncTransportButtonsUI();
         this.savePreferences();
-        this.showToast(`Repeat: ${this.state.repeat.toUpperCase()}`);
+        const labels = {
+          off: "Repeat: OFF",
+          all: "Repeat: ALL (loop the whole queue)",
+          one: "Repeat: ONE (loop the current track)"
+        };
+        this.showToast(labels[this.state.repeat]);
       },
 
       toggleMute() {
@@ -5481,9 +5598,40 @@
       },
 
       syncTransportButtonsUI() {
-        document.getElementById("btnShuffle").classList.toggle("active", this.state.shuffle);
-        document.getElementById("btnRepeat").classList.toggle("active", this.state.repeat !== "off");
-        document.getElementById("repeatOneBadge").style.display = this.state.repeat === "one" ? "block" : "none";
+        const btnShuffle = document.getElementById("btnShuffle");
+        if (btnShuffle) btnShuffle.classList.toggle("active", this.state.shuffle);
+
+        const repeatActive = this.state.repeat !== "off";
+        const repeatLabels = {
+          off: "Repeat Mode: Off — click to enable Repeat All",
+          all: "Repeat Mode: Repeat All — click to switch to Repeat One",
+          one: "Repeat Mode: Repeat One — click to turn Repeat off"
+        };
+        const repeatTitle = repeatLabels[this.state.repeat] || "Repeat Mode";
+
+        // Desktop player bar repeat button
+        const btnRepeat = document.getElementById("btnRepeat");
+        const badgeDesktop = document.getElementById("repeatOneBadge");
+        if (btnRepeat) {
+          btnRepeat.classList.toggle("active", repeatActive);
+          btnRepeat.title = repeatTitle;
+          btnRepeat.setAttribute("aria-label", repeatTitle);
+        }
+        if (badgeDesktop) {
+          badgeDesktop.style.display = this.state.repeat === "one" ? "block" : "none";
+        }
+
+        // Expanded (maximised) player repeat button — NEW
+        const btnRepeatExpanded = document.getElementById("btnRepeatExpanded");
+        const badgeExpanded = document.getElementById("repeatOneBadgeExpanded");
+        if (btnRepeatExpanded) {
+          btnRepeatExpanded.classList.toggle("active", repeatActive);
+          btnRepeatExpanded.title = repeatTitle;
+          btnRepeatExpanded.setAttribute("aria-label", repeatTitle);
+        }
+        if (badgeExpanded) {
+          badgeExpanded.style.display = this.state.repeat === "one" ? "block" : "none";
+        }
       },
 
       updateMediaSession(track) {
@@ -5508,7 +5656,86 @@
         panel.classList.toggle("open");
         if (panel.classList.contains("open")) {
           this.renderQueueDrawer();
+          // Make sure the maximised repeat button reflects current state immediately
+          this.syncTransportButtonsUI();
         }
+      },
+
+      /* ------------------------------------------------------------------------
+         EXPANDED PLAYER COVER-ART SEEK GESTURES (Double-tap / Double-click)
+         Left half  = rewind 5 seconds
+         Right half = forward 5 seconds
+         Works for both mouse (dblclick) and touch (manual double-tap detection).
+         ------------------------------------------------------------------------ */
+      bindArtworkSeekGestures() {
+        const artContainer = document.getElementById("expandedArtContainer");
+        if (!artContainer || artContainer.dataset.seekGesturesBound === "1") return;
+        artContainer.dataset.seekGesturesBound = "1";
+
+        let lastTapTime = 0;
+        let lastTapX = 0;
+
+        // Desktop / mouse: native double click
+        artContainer.addEventListener("dblclick", (e) => {
+          if (e.target.closest("button")) return; // never hijack the overlay buttons
+          e.preventDefault();
+          this.seekRelativeFromArtwork(e.clientX, artContainer);
+        });
+
+        // Mobile / touch: manual double-tap detection (dblclick is unreliable on touch)
+        artContainer.addEventListener("touchend", (e) => {
+          if (e.target.closest("button")) return;
+          const touch = (e.changedTouches && e.changedTouches[0]) || null;
+          if (!touch) return;
+          const now = Date.now();
+          if (now - lastTapTime < 320 && Math.abs(touch.clientX - lastTapX) < 90) {
+            e.preventDefault();
+            lastTapTime = 0;
+            this.seekRelativeFromArtwork(touch.clientX, artContainer);
+          } else {
+            lastTapTime = now;
+            lastTapX = touch.clientX;
+          }
+        }, { passive: false });
+      },
+
+      seekRelativeFromArtwork(clientX, containerEl) {
+        // Guard against dblclick + double-tap both firing on hybrid devices
+        const now = Date.now();
+        if (now - (this._lastArtSeekAt || 0) < 400) return;
+        this._lastArtSeekAt = now;
+
+        const audio = this.audio;
+        if (!audio || !audio.src || !isFinite(audio.duration) || audio.duration <= 0) {
+          this.showToast("Load and play a song first to use the 5-second seek gesture.", true);
+          return;
+        }
+
+        const rect = containerEl.getBoundingClientRect();
+        const isLeftHalf = clientX < rect.left + rect.width / 2;
+        const delta = isLeftHalf ? -5 : 5;
+        const target = Math.max(0, Math.min(audio.duration, (audio.currentTime || 0) + delta));
+
+        audio.currentTime = target;
+
+        this.flashArtSeek(isLeftHalf ? "left" : "right");
+        this.showToast(
+          `${isLeftHalf ? "⏪ Rewound 5s" : "⏩ Forwarded 5s"} • now at ${this.formatTime(target)}`
+        );
+      },
+
+      flashArtSeek(side) {
+        const leftEl = document.getElementById("artSeekFlashLeft");
+        const rightEl = document.getElementById("artSeekFlashRight");
+        if (leftEl) leftEl.classList.remove("show");
+        if (rightEl) rightEl.classList.remove("show");
+
+        const el = side === "left" ? leftEl : rightEl;
+        if (!el) return;
+        void el.offsetWidth; // force reflow so repeated taps re-animate
+        el.classList.add("show");
+        clearTimeout(this._artFlashTimer);
+        this._artFlashTimer = setTimeout(() => el.classList.remove("show"), 560);
       },
 
       cycleVisualizerMode() {
@@ -6445,6 +6672,9 @@ Ctrl + Right   : Next track
 Ctrl + F       : Focus library search bar
 M              : Mute / Unmute audio
 Escape         : Close modals, expanded player, or video player</div>
+            <h4>Touch / Mouse Gestures (Expanded Player)</h4>
+            <div class="code-snippet">Double-tap / double-click LEFT half of cover art  : Rewind 5 seconds
+Double-tap / double-click RIGHT half of cover art : Forward 5 seconds</div>
             <h4>Browser Limitations & Privacy</h4>
             <ul style="margin-left:18px;font-size:12.5px;color:var(--text-secondary);">
               <li>Zero external requests, zero cloud uploads, and zero tracking.</li>
@@ -6622,6 +6852,9 @@ Escape         : Close modals, expanded player, or video player</div>
             this.handleFilesSelected(e.dataTransfer.files);
           }
         });
+
+        // Cover-art double-tap / double-click seek gestures (expanded player)
+        this.bindArtworkSeekGestures();
       },
 
       bindKeyboardShortcuts() {
